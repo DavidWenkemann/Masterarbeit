@@ -1,10 +1,13 @@
 package main
 
 import (
-	"fmt"
-
-	//"errors"
 	"example/Masterarbeit/basedata"
+	//"fmt"
+	//"os"
+	//"strings"
+	//tea "github.com/charmbracelet/bubbletea"
+	//"github.com/evertras/bubble-table/table"
+	//"errors"
 	//"example/Masterarbeit/basedata"
 	//"github.com/gin-gonic/gin"
 )
@@ -16,9 +19,7 @@ func getProducts(c *gin.Context) {
 */
 
 func main() {
-	//router := gin.Default()
-	//router.GET("/products", getProducts)
-	//router.Run("localhost:8080")
 
-	fmt.Printf(basedata.GetProductsByEAN("4029764001807").Name)
+	basedata.StartUI()
+
 }
