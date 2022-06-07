@@ -1,11 +1,5 @@
 package reporting
 
-/*
-import (
-	"example/Masterarbeit/basedata"
-)
-*/
-
 type product struct {
 	EAN      string `json:"ean"`
 	Name     string `json:"name"`
