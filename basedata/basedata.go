@@ -1,16 +1,15 @@
 package basedata
 
 type product struct {
-	EAN      string `json: "ean"`
-	Name     string `json: "name"`
-	Quantity int    `json: "quantity"`
+	EAN  string `json:"ean"`
+	Name string `json:"name"`
+	//Quantity int    `json:"quantity"`
 }
 
 var products = []product{
-	{EAN: "4011803092174", Name: "Spezi", Quantity: 2},
-	{EAN: "4066600641919", Name: "Paulaner Weissbier alk.frei", Quantity: 5},
-	{EAN: "4029764001807", Name: "Clubmate", Quantity: 6},
-	{EAN: "123", Name: "Bier", Quantity: 10},
+	{EAN: "4011803092174", Name: "Spezi" /*Quantity: 2*/},
+	{EAN: "4066600641919", Name: "Paulaner Weissbier alk.frei" /*Quantity: 2*/},
+	{EAN: "4029764001807", Name: "Clubmate" /*Quantity: 2*/},
 }
 
 //searches and returnes specific product by ean
@@ -55,7 +54,7 @@ func AddProduct(ean string, name string) product {
 }
 
 //removes specific product, changes sorting of slice
-func RemoveProductByEAN(key string) {
+func RemoveProductByEAN(key string) bool {
 
 	//searchs product with same ean in slice
 	for i := range products {
@@ -65,8 +64,8 @@ func RemoveProductByEAN(key string) {
 			products[i] = products[len(products)-1]
 			//shorten up slice by 1
 			products = products[:len(products)-1]
-			return
+			return true
 		}
 	}
-	return
+	return false
 }
