@@ -1,12 +1,12 @@
 package reporting
 
-type product struct {
+type Product struct {
 	EAN      string `json:"ean"`
 	Name     string `json:"name"`
 	Quantity int    `json:"quantity"`
 }
 
-var productsInStock = []product{
+var productsInStock = []Product{
 	{EAN: "4011803092174", Name: "Spezi", Quantity: 2},
 	{EAN: "4066600641919", Name: "Paulaner Weissbier alk.frei", Quantity: 2},
 	{EAN: "4029764001807", Name: "Clubmate", Quantity: 2},

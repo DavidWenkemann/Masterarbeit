@@ -27,8 +27,9 @@ func StartUI() {
 
 //add const for columnanes in bubbletable
 const (
-	columnKeyEan  = "ean"
-	columnKeyName = "name"
+	columnKeyEan   = "ean"
+	columnKeyName  = "name"
+	columnKeyPrice = "price"
 )
 
 type model struct {
@@ -60,6 +61,7 @@ func initialModel(t textinput.Model) model {
 		simpleTable: table.New([]table.Column{
 			table.NewColumn(columnKeyEan, "EAN", 13),
 			table.NewColumn(columnKeyName, "Name", 30),
+			table.NewColumn(columnKeyPrice, "Price", 6),
 		}),
 		data:      GetAllProducts(),
 		textInput: t,
@@ -101,7 +103,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// The "enter" key and the spacebar (a literal space) toggle
 		// the selected state for the item that the cursor is pointing at.
-		case "enter", " ":
+		case "enter":
 
 			if m.state == "overview" {
 
@@ -129,7 +131,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				query := strings.TrimSpace(m.textInput.Value())
 
 				if query != "" && m.newEan == "" {
-					//m.typing = false
 					m.newEan = query
 					m.textInput.Reset()
 					m.state = "addname"
@@ -139,7 +140,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				query := strings.TrimSpace(m.textInput.Value())
 
 				if query != "" {
-					//m.typing = false
 					m.newName = query
 					m.textInput.Reset()
 					m.state = "addprice"
@@ -151,7 +151,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				if query != "" {
 					m.typing = false
 
-					if p, err := strconv.ParseFloat(query, 64); err == nil {
+					//Replace(query, ",", ".", 1)
+
+					if p, err := strconv.ParseFloat(strings.Replace(query, ",", ".", 1), 64); err == nil {
 						m.newPrice = p
 
 						//fmt.Println(p) // 3.1415927410125732
@@ -240,9 +242,9 @@ func (m model) View() string {
 		if m.typing {
 			//s = "Status add name\n\n"
 
-			return fmt.Sprintf("Type in Name for %s: \n%s", m.newName, m.textInput.View())
+			return fmt.Sprintf("Type in Price for %s: \n%s", m.newName, m.textInput.View())
 		} else {
-			s = "Status add:\n\n"
+			s = "Status add: Failure\n\n"
 		}
 
 	} else if m.state == "delete" {
@@ -268,8 +270,9 @@ func generateRowsFromData(refreshedproducts []Product) []table.Row {
 
 	for i := 0; i <= len(refreshedproducts)-1; i++ {
 		row := table.NewRow(table.RowData{
-			columnKeyEan:  refreshedproducts[i].EAN,
-			columnKeyName: refreshedproducts[i].Name,
+			columnKeyEan:   refreshedproducts[i].EAN,
+			columnKeyName:  refreshedproducts[i].Name,
+			columnKeyPrice: fmt.Sprintf("%.2f€", refreshedproducts[i].Price),
 		})
 		rows = append(rows, row)
 	}

@@ -1,20 +1,21 @@
 package basedata
 
-type product struct {
-	EAN  string `json:"ean"`
-	Name string `json:"name"`
+type Product struct {
+	EAN   string  `json:"ean"`
+	Name  string  `json:"name"`
+	Price float64 `json:"price"`
 }
 
-var products = []product{
-	{EAN: "4011803092174", Name: "Spezi"},
-	{EAN: "4066600641919", Name: "Paulaner Weissbier alk.frei"},
-	{EAN: "4029764001807", Name: "Clubmate"},
+var products = []Product{
+	{EAN: "4011803092174", Name: "Spezi", Price: 0.75},
+	{EAN: "4066600641919", Name: "Paulaner Weissbier alk.frei", Price: 1.39},
+	{EAN: "4029764001807", Name: "Clubmate", Price: 0.95},
 }
 
 //searches and returnes specific product by ean
-func GetProductByEAN(key string) product {
+func GetProductByEAN(key string) Product {
 
-	var p product
+	var p Product
 
 	//searches product with same ean in slice and returns it
 	for i := range products {
@@ -30,19 +31,20 @@ func GetProductByEAN(key string) product {
 }
 
 //returns all products in the slice
-func GetAllProducts() []product {
+func GetAllProducts() []Product {
 	return products
 }
 
 //Adds a new product to the slice, quanity is 0
-func AddProduct(ean string, name string) product {
+func AddProduct(ean string, name string, price float64) Product {
 
 	//TODO: wenn ean schon vorhanden -> Fehler
 
 	//Initialize new Product
-	p := product{
-		EAN:  ean,
-		Name: name,
+	p := Product{
+		EAN:   ean,
+		Name:  name,
+		Price: price,
 	}
 
 	//Add new Product to the slice
