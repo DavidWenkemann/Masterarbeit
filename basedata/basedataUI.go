@@ -3,6 +3,7 @@ package basedata
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/textinput"
@@ -38,13 +39,14 @@ type model struct {
 
 	//for bubble table
 	simpleTable table.Model
-	data        []product
+	data        []Product
 
 	textInput textinput.Model
 	typing    bool
 
-	newEan  string
-	newName string
+	newEan   string
+	newName  string
+	newPrice float64
 }
 
 func initialModel(t textinput.Model) model {
@@ -64,6 +66,7 @@ func initialModel(t textinput.Model) model {
 		typing:    true,
 		newEan:    "",
 		newName:   "",
+		newPrice:  0.0,
 	}
 }
 
@@ -136,12 +139,30 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				query := strings.TrimSpace(m.textInput.Value())
 
 				if query != "" {
-					m.typing = false
+					//m.typing = false
 					m.newName = query
-					AddProduct(m.newEan, m.newName)
+					m.textInput.Reset()
+					m.state = "addprice"
+				}
+			}
+			if m.typing && m.state == "addprice" {
+				query := strings.TrimSpace(m.textInput.Value())
+
+				if query != "" {
+					m.typing = false
+
+					if p, err := strconv.ParseFloat(query, 64); err == nil {
+						m.newPrice = p
+
+						//fmt.Println(p) // 3.1415927410125732
+					}
+
+					//m.newPrice = query
+					AddProduct(m.newEan, m.newName, m.newPrice)
 					m.textInput.Reset()
 					m.newEan = ""
 					m.newName = ""
+					m.newPrice = 0.0
 					m.state = "overview"
 				}
 			}
@@ -163,6 +184,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	if m.state == "addname" {
+		m.typing = true
+		var cmd tea.Cmd
+
+		m.textInput, cmd = m.textInput.Update(msg)
+		return m, cmd
+	}
+
+	if m.state == "addprice" {
 		m.typing = true
 		var cmd tea.Cmd
 
@@ -206,6 +235,16 @@ func (m model) View() string {
 			s = "Status add:\n\n"
 		}
 
+	} else if m.state == "addprice" {
+
+		if m.typing {
+			//s = "Status add name\n\n"
+
+			return fmt.Sprintf("Type in Name for %s: \n%s", m.newName, m.textInput.View())
+		} else {
+			s = "Status add:\n\n"
+		}
+
 	} else if m.state == "delete" {
 
 		//m.textInput.Focus()
@@ -224,7 +263,7 @@ func (m model) View() string {
 
 }
 
-func generateRowsFromData(refreshedproducts []product) []table.Row {
+func generateRowsFromData(refreshedproducts []Product) []table.Row {
 	rows := []table.Row{}
 
 	for i := 0; i <= len(refreshedproducts)-1; i++ {
