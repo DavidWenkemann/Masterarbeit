@@ -1,4 +1,6 @@
-package basedata
+package main
+
+import "github.com/DavidWenkemann/Masterarbeit/basedata/database"
 
 type Product struct {
 	EAN   string  `json:"ean"`
@@ -6,14 +8,25 @@ type Product struct {
 	Price float64 `json:"price"`
 }
 
-var products = []Product{
-	{EAN: "4011803092174", Name: "Spezi", Price: 0.75},
-	{EAN: "4066600641919", Name: "Paulaner Weissbier alk.frei", Price: 1.39},
-	{EAN: "4029764001807", Name: "Clubmate", Price: 0.95},
+func mapDBProductToBProduct(input database.Product) Product {
+
+	return Product{EAN: input.EAN, Name: input.Name, Price: input.Price}
+
 }
 
-//searches and returnes specific product by ean
+func mapBProductToDBProduct(input Product) database.Product {
+
+	return database.Product{EAN: input.EAN, Name: input.Name, Price: input.Price}
+
+}
+
+type baseDataBusiness struct{}
+
 func GetProductByEAN(key string) Product {
+	return bdb.GetProductByEAN(key)
+}
+
+func (bdb *baseDataBusiness) GetProductByEAN(key string) Product {
 
 	var p Product
 
@@ -31,12 +44,12 @@ func GetProductByEAN(key string) Product {
 }
 
 //returns all products in the slice
-func GetAllProducts() []Product {
+func (bdb *baseDataBusiness) GetAllProducts() []Product {
 	return products
 }
 
 //Adds a new product to the slice, quanity is 0
-func AddProduct(ean string, name string, price float64) Product {
+func (bdb *baseDataBusiness) AddProduct(ean string, name string, price float64) Product {
 
 	//TODO: wenn ean schon vorhanden -> Fehler
 
@@ -55,7 +68,7 @@ func AddProduct(ean string, name string, price float64) Product {
 }
 
 //removes specific product, changes sorting of slice
-func RemoveProductByEAN(key string) bool {
+func (bdb *baseDataBusiness) RemoveProductByEAN(key string) bool {
 
 	//searchs product with same ean in slice
 	for i := range products {

@@ -1,4 +1,4 @@
-package basedata
+package main
 
 import (
 	"fmt"
@@ -10,6 +10,34 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/evertras/bubble-table/table"
 )
+
+//Business/Persistenze Produkte
+
+//Draw --> know cols --> map products to raw data -->  values to :  col/string
+
+type value struct {
+	col string
+	val string
+}
+
+func NewIntVal(val int, col string) value {
+	v := value{}
+	v.col = col
+	v.val = strconv.Itoa(val)
+	return v
+}
+func NewStrVal(val string, col string) value {
+	v := value{}
+	v.col = col
+	v.val = val
+	return v
+}
+
+type dataRow struct {
+	values []value
+}
+
+var bdb *baseDataBusiness = nil
 
 func StartUI() {
 
@@ -54,7 +82,6 @@ func initialModel(t textinput.Model) model {
 	return model{
 		// Our shopping list is a grocery list
 		choices: []string{"Add Product", "Delete Product"},
-
 		//state: "overview",
 		state: "overview",
 
@@ -63,7 +90,7 @@ func initialModel(t textinput.Model) model {
 			table.NewColumn(columnKeyName, "Name", 30),
 			table.NewColumn(columnKeyPrice, "Price", 6),
 		}),
-		data:      GetAllProducts(),
+		data:      bdb.GetAllProducts(),
 		textInput: t,
 		typing:    true,
 		newEan:    "",
@@ -122,7 +149,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				query := strings.TrimSpace(m.textInput.Value())
 				if query != "" {
 					m.typing = false
-					RemoveProductByEAN(query)
+					bdb.RemoveProductByEAN(query)
 					m.textInput.Reset()
 					m.state = "overview"
 				}
@@ -160,7 +187,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					}
 
 					//m.newPrice = query
-					AddProduct(m.newEan, m.newName, m.newPrice)
+					bdb.AddProduct(m.newEan, m.newName, m.newPrice)
 					m.textInput.Reset()
 					m.newEan = ""
 					m.newName = ""
@@ -173,7 +200,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	if m.state == "overview" {
 		//Refresh Products after adding or deleting
-		m.data = GetAllProducts()
+		m.data = bdb.GetAllProducts()
 		m.typing = false
 	}
 
