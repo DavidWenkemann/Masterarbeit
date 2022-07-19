@@ -1,18 +1,128 @@
+//Package Database emulates a Database.
+//In fact all the functions are implemented, but the data is simply stored
+//in RAM and will be resetted when the application is closed.
+
 package database
 
-import "github.com/DavidWenkemann/Masterarbeit/model"
+import (
+	"strconv"
+	"time"
 
-//pruducts emulates a Database table with 4 columns EAN (unique) , Name , Price ans Quantity
-var products = []model.DBProduct{
-	{ProductID: 1, EAN: "4011803092174", Name: "Spezi", Price: 0.75},
-	{ProductID: 2, EAN: "4066600641919", Name: "Paulaner Weissbier alk.frei", Price: 1.2},
-	{ProductID: 3, EAN: "4029764001807", Name: "Clubmate", Price: 2.2},
+	"github.com/DavidWenkemann/Masterarbeit/model"
+)
+
+/*
+**
+Internal variables
+**
+*/
+
+//Serial Numbers are unique keys in the database
+//When a produt/item is created, they are increased by 1
+var productSerial int
+var itemSerial int
+
+var items = []model.DBItem{}
+var products = []model.DBProduct{} //pruducts emulates a Database table with 4 columns ProductID (unique), EAN (unique) , Name , and Price
+
+/*
+**
+Internal Functions
+**
+*/
+
+func newProduct(ean string, name string, price float64) model.DBProduct {
+	productSerial++ // change serial number, so its always unique
+	p := model.DBProduct{}
+	p.ProductID = productSerial
+	p.EAN = ean
+	p.Name = name
+	p.Price = price
+	return p
 }
 
-var items = []model.DBItem{
-	{ProductID: 1, ItemID: "1"},
+//internal function. adds item to db (with oldItem-Function) and returns it. Not possible to use a timeSelled
+func newItem(pID int) model.DBItem {
+	return oldItem(pID, time.Now(), nil)
 }
 
+//adds items to database and returns them. Also possible for older items.
+func oldItem(pID int, timeReceived time.Time, timeSelled *time.Time) model.DBItem {
+	itemSerial++ // change itemserial number, so its always unique
+	i := model.DBItem{}
+	i.ItemID = strconv.Itoa(itemSerial)
+	i.ProductID = pID
+	i.ReceivingDate = timeReceived
+	if timeSelled != nil {
+		i.SellingDate = *timeSelled
+	}
+	//Print item serial for bottle
+	return i
+}
+
+//SpinupDB is a public function that fills up the emulated database.
+//It is called from main.go when the application starts up.
+func SpinupDB() {
+
+	//todo products hinzufügen
+	products = append(products, newProduct("4011803092174", "Spezi", 0.75))
+	products = append(products, newProduct("4066600641919", "Paulaner Hefeweizen", 1.39))
+	products = append(products, newProduct("4029764001807", "Clubmate", 2.50))
+
+	//fill up item database with several items in the past.
+	items = append(items, oldItem(1, time.Now().Add(-24*time.Hour), nil))
+	items = append(items, oldItem(1, time.Now().Add(-54*time.Hour), nil))
+	items = append(items, oldItem(1, time.Now().Add(-827*time.Hour), nil))
+	items = append(items, oldItem(1, time.Now().Add(-46*time.Hour), timePtr(time.Now().Add(-24*time.Hour))))
+
+	//fmt.Printf("%v", products)
+	//fmt.Printf("%v", items)
+
+}
+
+/*
+**
+Public Functions
+**
+*/
+
+//add an product to data table
+func NewProduct(ean string, name string, price float64) model.BProduct {
+	p := newProduct(ean, name, price)
+	products = append(products, p) //Insert into DB
+
+	return mapDBProductToBProduct(p)
+}
+
+//returns businessmodel of product with specific ean. If not available returns nil
+func GetProductByEan(ean string) model.BProduct {
+	var p model.BProduct
+	for i := range products {
+		if ean == products[i].EAN {
+			p = mapDBProductToBProduct(products[i])
+		}
+	}
+	return p
+}
+
+//removes products with specific ean out of db.
+func RemoveProductByEan(ean string) {
+	for i := range products {
+		if ean == products[i].EAN {
+			products[i] = products[len(products)-1] // Copy last element to index i.
+			products[len(products)-1] = nil         // Erase last element (write zero value).
+			products = products[:len(products)-1]   // Truncate slice.
+		}
+	}
+}
+
+//public function to add an item to data table
+func NewItem(pID int) {
+	i := newItem(pID)
+	items = append(items, i) //Insert into DB
+}
+
+/*
 //maps DB-Products to B-Products and returns them
 func GetAllProducts() []model.BProduct {
 
@@ -24,10 +134,20 @@ func GetAllProducts() []model.BProduct {
 
 	return businessProducts
 }
+*/
+
+/*
+**
+Helper and Mapping Functions
+**
+*/
 
 //maps DB-Products to B-Products
 func mapDBProductToBProduct(input model.DBProduct) model.BProduct {
-
 	return model.BProduct{EAN: input.EAN, Name: input.Name, Price: input.Price}
+}
 
+//helper function to convert a time into a pointer
+func timePtr(t time.Time) *time.Time {
+	return &t
 }

@@ -6,7 +6,6 @@
 package reporting
 
 import (
-	"github.com/DavidWenkemann/Masterarbeit/database"
 	"github.com/DavidWenkemann/Masterarbeit/model"
 )
 
@@ -27,10 +26,11 @@ func mapBProductToDBProduct(input model.BProduct) model.DBProduct {
 
 }
 
+/*
 //checks if productname is in database and adds quantity by one
 func StockProductByOne(ean string) bool {
-	productsInStock := database.GetAllProducts()
 
+	productsInStock := database.GetAllProducts()
 	for i := range productsInStock {
 
 		if productsInStock[i].EAN == ean {
@@ -40,7 +40,9 @@ func StockProductByOne(ean string) bool {
 	}
 	return false
 }
+*/
 
+/*
 //checks if productname is in database and adds quantity by one
 func RemoveProductByOne(ean string) bool {
 	productsInStock := database.GetAllProducts()
@@ -54,3 +56,4 @@ func RemoveProductByOne(ean string) bool {
 	}
 	return false
 }
+*/
