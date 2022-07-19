@@ -1,24 +1,33 @@
 package main
 
-import "github.com/DavidWenkemann/Masterarbeit/basedata/database"
+/*
 
+import (
+	"github.com/DavidWenkemann/Masterarbeit/basedata/model"
+)
+
+/*
 type Product struct {
 	EAN   string  `json:"ean"`
 	Name  string  `json:"name"`
 	Price float64 `json:"price"`
 }
+*/
 
-func mapDBProductToBProduct(input database.Product) Product {
+/*
+func mapDBProductToBProduct(input model.DBProduct) model.BProduct {
 
-	return Product{EAN: input.EAN, Name: input.Name, Price: input.Price}
+	return model.BProduct{EAN: input.EAN, Name: input.Name, Price: input.Price}
+
+}
+
+func mapBProductToDBProduct(input model.BProduct) model.DBProduct {
+
+	return model.DBProduct{EAN: input.EAN, Name: input.Name, Price: input.Price}
 
 }
 
-func mapBProductToDBProduct(input Product) database.Product {
-
-	return database.Product{EAN: input.EAN, Name: input.Name, Price: input.Price}
-
-}
+//var products = mapDBProductToBProduct(database.GetAllProducts())
 
 type baseDataBusiness struct{}
 
@@ -83,3 +92,5 @@ func (bdb *baseDataBusiness) RemoveProductByEAN(key string) bool {
 	}
 	return false
 }
+
+*/
