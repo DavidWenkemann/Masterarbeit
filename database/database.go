@@ -1,12 +1,16 @@
 package database
 
-import "github.com/DavidWenkemann/Masterarbeit/reporting/model"
+import "github.com/DavidWenkemann/Masterarbeit/model"
 
 //pruducts emulates a Database table with 4 columns EAN (unique) , Name , Price ans Quantity
 var products = []model.DBProduct{
-	{EAN: "4011803092174", Name: "Spezi", Price: 0.75, Quantity: 2},
-	{EAN: "4066600641919", Name: "Paulaner Weissbier alk.frei", Price: 1.2, Quantity: 2},
-	{EAN: "4029764001807", Name: "Clubmate", Price: 2.2, Quantity: 2},
+	{ProductID: 1, EAN: "4011803092174", Name: "Spezi", Price: 0.75},
+	{ProductID: 2, EAN: "4066600641919", Name: "Paulaner Weissbier alk.frei", Price: 1.2},
+	{ProductID: 3, EAN: "4029764001807", Name: "Clubmate", Price: 2.2},
+}
+
+var items = []model.DBItem{
+	{ProductID: 1, ItemID: "1"},
 }
 
 //maps DB-Products to B-Products and returns them
@@ -24,6 +28,6 @@ func GetAllProducts() []model.BProduct {
 //maps DB-Products to B-Products
 func mapDBProductToBProduct(input model.DBProduct) model.BProduct {
 
-	return model.BProduct{EAN: input.EAN, Name: input.Name, Price: input.Price, Quantity: input.Quantity}
+	return model.BProduct{EAN: input.EAN, Name: input.Name, Price: input.Price}
 
 }

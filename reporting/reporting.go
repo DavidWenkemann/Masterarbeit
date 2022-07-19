@@ -6,29 +6,30 @@
 package reporting
 
 import (
-	"github.com/DavidWenkemann/Masterarbeit/reporting/database"
-	"github.com/DavidWenkemann/Masterarbeit/reporting/model"
+	"github.com/DavidWenkemann/Masterarbeit/database"
+	"github.com/DavidWenkemann/Masterarbeit/model"
 )
 
 //loading data from DB
-var productsInStock = database.GetAllProducts()
+//var productsInStock = database.GetAllProducts()
 
 //Maps Product from Datebase-Model to Business-Model
 func mapDBProductToBProduct(input model.DBProduct) model.BProduct {
 
-	return model.BProduct{EAN: input.EAN, Name: input.Name, Price: input.Price, Quantity: input.Quantity}
+	return model.BProduct{EAN: input.EAN, Name: input.Name, Price: input.Price}
 
 }
 
 //Maps Product from Business-Model to Database-Model
 func mapBProductToDBProduct(input model.BProduct) model.DBProduct {
 
-	return model.DBProduct{EAN: input.EAN, Name: input.Name, Price: input.Price, Quantity: input.Quantity}
+	return model.DBProduct{EAN: input.EAN, Name: input.Name, Price: input.Price}
 
 }
 
 //checks if productname is in database and adds quantity by one
 func StockProductByOne(ean string) bool {
+	productsInStock := database.GetAllProducts()
 
 	for i := range productsInStock {
 
@@ -42,6 +43,7 @@ func StockProductByOne(ean string) bool {
 
 //checks if productname is in database and adds quantity by one
 func RemoveProductByOne(ean string) bool {
+	productsInStock := database.GetAllProducts()
 
 	for i := range productsInStock {
 
