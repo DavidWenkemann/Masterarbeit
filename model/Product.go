@@ -11,15 +11,17 @@ type DBProduct struct {
 }
 
 type BProduct struct {
-	EAN   string
-	Name  string
-	Price float64
+	ProductID int
+	EAN       string
+	Name      string
+	Price     float64
 	//Quantity int
 }
 
 type APIProduct struct {
-	EAN   string  `json:"ean"`
-	Name  string  `json:"name"`
-	Price float64 `json:"price"`
+	ProductID int     `json:"id"`
+	EAN       string  `json:"ean"`
+	Name      string  `json:"name"`
+	Price     float64 `json:"price"`
 	//Quantity int     `json:"quantity"`
 }

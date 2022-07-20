@@ -1,14 +1,24 @@
+// In the Warehouse new items were delivered.
+// When the EAN is scanned the item will be added to database
+// and the the item id will be returned
+
 package warehouse
 
-func StockProduct(ean string) bool {
+import (
+	"github.com/DavidWenkemann/Masterarbeit/database"
+)
 
-	//Proof if ean is in basedata
-	// if basedata.GetProductByEAN(ean).EAN != ean {
-	// 	//Failure, because product isnt available
-	// 	return false
-	// } else {
-	// 	//Send information to reporting ToDo
-	// 	return true
-	// }
-	return false
+// checks if there is an product with that ean. If not an empty product will
+// be returned and also an empty ItemID
+// if ean is existing the new item will be added and new itemID returned
+func StockProduct(ean string) string {
+
+	var newItemID string
+	product := database.GetProductByEan(ean)
+
+	if product.EAN == ean {
+		newItemID = database.NewItem(product.ProductID)
+	}
+	return newItemID
+
 }

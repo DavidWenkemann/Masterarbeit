@@ -1,5 +1,5 @@
 //basedata package is responsible for adding and removing basedata.
-//Its connected to DB and UI
+//It is connected to DB and UI
 
 package main
 
@@ -11,8 +11,10 @@ import (
 //adds new product to DB
 func addProduct(ean string, name string, price float64) model.BProduct {
 	var p model.BProduct
-	if database.GetProductByEan(ean) != nil {
-		database.NewProduct(ean, name, price)
+	//checks if there is an product with that ean. If not an empty product will
+	//be returned and the new product will be added
+	if database.GetProductByEan(ean) != p {
+		p = database.NewProduct(ean, name, price)
 	}
 	return p
 }

@@ -107,23 +107,38 @@ func GetProductByEan(ean string) model.BProduct {
 
 //removes products with specific ean out of db.
 func RemoveProductByEan(ean string) {
+	var p model.DBProduct //emtpy product to overwrite the last element
 	for i := range products {
 		if ean == products[i].EAN {
 			products[i] = products[len(products)-1] // Copy last element to index i.
-			products[len(products)-1] = nil         // Erase last element (write zero value).
+			products[len(products)-1] = p           // Erase last element (write zero value).
 			products = products[:len(products)-1]   // Truncate slice.
 		}
 	}
 }
 
-//public function to add an item to data table
-func NewItem(pID int) {
+//public function to add an item to data table. New Product ID will be returned
+func NewItem(pID int) string {
 	i := newItem(pID)
 	items = append(items, i) //Insert into DB
+	return i.ItemID
 }
 
-/*
-//maps DB-Products to B-Products and returns them
+func GetItemsInStockByEan(ean string) int {
+
+	var count int
+	pID := GetProductByEan(ean).ProductID
+
+	for i := range items {
+		if pID == items[i].ProductID && items[i].SellingDate.IsZero() {
+			count++
+		}
+	}
+
+	return count
+}
+
+//Maps all products to businessproducts and returns them
 func GetAllProducts() []model.BProduct {
 
 	var businessProducts []model.BProduct
@@ -134,7 +149,14 @@ func GetAllProducts() []model.BProduct {
 
 	return businessProducts
 }
-*/
+
+func SetItemSelledDate(itemID string) {
+	for i := range items {
+		if itemID == items[i].ItemID {
+			items[i].SellingDate = time.Now()
+		}
+	}
+}
 
 /*
 **
