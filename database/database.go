@@ -69,11 +69,15 @@ func SpinupDB() {
 	products = append(products, newProduct("4066600641919", "Paulaner Hefeweizen", 1.39))
 	products = append(products, newProduct("4029764001807", "Clubmate", 2.50))
 
+	//emtpyTime := time.Now().IsZero()
+
 	//fill up item database with several items in the past.
 	items = append(items, oldItem(1, time.Now().Add(-24*time.Hour), nil))
 	items = append(items, oldItem(1, time.Now().Add(-54*time.Hour), nil))
-	items = append(items, oldItem(1, time.Now().Add(-827*time.Hour), nil))
-	items = append(items, oldItem(1, time.Now().Add(-46*time.Hour), timePtr(time.Now().Add(-24*time.Hour))))
+	items = append(items, oldItem(3, time.Now().Add(-827*time.Hour), nil))
+	items = append(items, oldItem(2, time.Now().Add(-46*time.Hour), timePtr(time.Now().Add(-24*time.Hour))))
+
+	items[0].ItemID = "4005906003427"
 
 	//fmt.Printf("%v", products)
 	//fmt.Printf("%v", items)
@@ -105,6 +109,17 @@ func GetProductByEan(ean string) model.BProduct {
 	return p
 }
 
+//returns businessmodel of product with specific id. If not available returns nil
+func GetProductByID(id int) model.BProduct {
+	var p model.BProduct
+	for i := range products {
+		if id == products[i].ProductID {
+			p = mapDBProductToBProduct(products[i])
+		}
+	}
+	return p
+}
+
 //removes products with specific ean out of db.
 func RemoveProductByEan(ean string) {
 	var p model.DBProduct //emtpy product to overwrite the last element
@@ -129,6 +144,8 @@ func GetItemsInStockByEan(ean string) int {
 	var count int
 	pID := GetProductByEan(ean).ProductID
 
+	//TODO: funktioniert wohl ncch nicht mit time
+
 	for i := range items {
 		if pID == items[i].ProductID && items[i].SellingDate.IsZero() {
 			count++
@@ -136,6 +153,16 @@ func GetItemsInStockByEan(ean string) int {
 	}
 
 	return count
+}
+
+func GetItemById(itemID string) model.BItem {
+	var item model.BItem
+	for i := range items {
+		if itemID == items[i].ItemID {
+			item = mapDBItemToBItem(items[i])
+		}
+	}
+	return item
 }
 
 //Maps all products to businessproducts and returns them
@@ -167,6 +194,10 @@ Helper and Mapping Functions
 //maps DB-Products to B-Products
 func mapDBProductToBProduct(input model.DBProduct) model.BProduct {
 	return model.BProduct{EAN: input.EAN, Name: input.Name, Price: input.Price}
+}
+
+func mapDBItemToBItem(input model.DBItem) model.BItem {
+	return model.BItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
 }
 
 //helper function to convert a time into a pointer

@@ -3,14 +3,14 @@ package model
 import "time"
 
 type APIItem struct {
-	Product       BProduct
+	Product       APIProduct
 	ItemID        string
 	ReceivingDate time.Time
 	SellingDate   time.Time
 }
 
 type BItem struct {
-	Product       BProduct
+	ProductID     int
 	ItemID        string
 	ReceivingDate time.Time
 	SellingDate   time.Time
