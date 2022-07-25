@@ -37,7 +37,9 @@ func generateRowsFromCart(refreshedcart []model.APIItem, m modelUI) []table.Row 
 	}
 
 	lastrow := table.NewRow(table.RowData{
-		columnKeyName:  fmt.Sprintf("%s", m.scanInputStore.View()),
+		//columnKeyName:  fmt.Sprintf(" %s", m.scanInputStore.View()),
+		columnKeyName: fmt.Sprintf(" %s", m.textInput.View()),
+
 		columnKeyPrice: "",
 	})
 	rows = append(rows, lastrow)
@@ -48,6 +50,8 @@ func generateRowsFromCart(refreshedcart []model.APIItem, m modelUI) []table.Row 
 func StoreUI(m modelUI) string {
 
 	doc := strings.Builder{}
+
+	//m.textInput.SetCursor(0)
 
 	/*
 		// Status bar
@@ -89,10 +93,6 @@ func StoreUI(m modelUI) string {
 
 	//Title
 	{
-		var (
-			colors = colorGrid(1, 5)
-			title  strings.Builder
-		)
 
 		titleStyle = lipgloss.NewStyle().
 			MarginLeft(1).
@@ -102,21 +102,10 @@ func StoreUI(m modelUI) string {
 			Foreground(lipgloss.Color("#FFF7DB")).
 			SetString("Store")
 
-		for i, v := range colors {
-			const offset = 1
-			c := lipgloss.Color(v[0])
-			fmt.Fprint(&title, titleStyle.Copy().MarginLeft(i*offset).Background(c))
-			if i < len(colors)-1 {
-				title.WriteRune('\n')
-			}
-		}
-
 		desc := lipgloss.JoinVertical(lipgloss.Left,
 			descStyle.Render("Welcome to the Store"),
 			infoStyle.Render("Scan for add"+divider+"Spacebar for Checkout"),
 		)
-
-		//row := lipgloss.JoinHorizontal(lipgloss.Top, title.String(), desc, title.String())
 		row := lipgloss.Place(width, 3,
 			lipgloss.Center, lipgloss.Center,
 			lipgloss.JoinHorizontal(lipgloss.Top, desc),

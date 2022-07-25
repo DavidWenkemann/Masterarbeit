@@ -1,7 +1,7 @@
 //basedata package is responsible for adding and removing basedata.
 //It is connected to DB and UI
 
-package main
+package basedata
 
 import (
 	"github.com/DavidWenkemann/Masterarbeit/database"
@@ -9,7 +9,7 @@ import (
 )
 
 //adds new product to DB
-func addProduct(ean string, name string, price float64) model.BProduct {
+func AddProduct(ean string, name string, price float64) model.BProduct {
 	var p model.BProduct
 	//checks if there is an product with that ean. If not an empty product will
 	//be returned and the new product will be added
@@ -20,6 +20,6 @@ func addProduct(ean string, name string, price float64) model.BProduct {
 }
 
 //Removes specific product from DB by EAN
-func removeProduct(ean string) {
+func RemoveProduct(ean string) {
 	database.RemoveProductByEan(ean)
 }

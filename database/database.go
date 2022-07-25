@@ -38,6 +38,7 @@ func newProduct(ean string, name string, price float64) model.DBProduct {
 	p.EAN = ean
 	p.Name = name
 	p.Price = price
+	products = append(products, p)
 	return p
 }
 
@@ -65,9 +66,10 @@ func oldItem(pID int, timeReceived time.Time, timeSelled *time.Time) model.DBIte
 func SpinupDB() {
 
 	//todo products hinzufügen
-	products = append(products, newProduct("4011803092174", "Spezi", 0.75))
-	products = append(products, newProduct("4066600641919", "Paulaner Hefeweizen", 1.39))
-	products = append(products, newProduct("4029764001807", "Clubmate", 2.50))
+	newProduct("4011803092174", "Spezi", 0.75)
+	newProduct("4066600641919", "Paulaner Hefeweizen", 1.39)
+	newProduct("4029764001807", "Clubmate", 2.50)
+	newProduct("4102560080068", "Alasia Medium Water", 1)
 
 	//emtpyTime := time.Now().IsZero()
 

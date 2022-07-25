@@ -69,6 +69,9 @@ func TestGetItemsInStockByEan(t *testing.T) {
 		args args
 		want int
 	}{
+
+
+		
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
