@@ -38,7 +38,7 @@ func newProduct(ean string, name string, price float64) model.DBProduct {
 	p.EAN = ean
 	p.Name = name
 	p.Price = price
-	products = append(products, p)
+	//products = append(products, p)
 	return p
 }
 
@@ -66,10 +66,10 @@ func oldItem(pID int, timeReceived time.Time, timeSelled *time.Time) model.DBIte
 func SpinupDB() {
 
 	//todo products hinzufügen
-	newProduct("4011803092174", "Spezi", 0.75)
-	newProduct("4066600641919", "Paulaner Hefeweizen", 1.39)
-	newProduct("4029764001807", "Clubmate", 2.50)
-	newProduct("4102560080068", "Alasia Medium Water", 1)
+	NewProduct("4011803092174", "Spezi", 0.75)
+	NewProduct("4066600641919", "Paulaner Hefeweizen", 1.39)
+	NewProduct("4029764001807", "Clubmate", 2.50)
+	NewProduct("4102560080068", "Alasia Medium Water", 1)
 
 	//emtpyTime := time.Now().IsZero()
 
@@ -79,7 +79,7 @@ func SpinupDB() {
 	items = append(items, oldItem(3, time.Now().Add(-827*time.Hour), nil))
 	items = append(items, oldItem(2, time.Now().Add(-46*time.Hour), timePtr(time.Now().Add(-24*time.Hour))))
 
-	items[0].ItemID = "4005906003427"
+	//items[0].ItemID = "4005906003427"
 
 	//fmt.Printf("%v", products)
 	//fmt.Printf("%v", items)
@@ -195,7 +195,7 @@ Helper and Mapping Functions
 
 //maps DB-Products to B-Products
 func mapDBProductToBProduct(input model.DBProduct) model.BProduct {
-	return model.BProduct{EAN: input.EAN, Name: input.Name, Price: input.Price}
+	return model.BProduct{ProductID: input.ProductID, EAN: input.EAN, Name: input.Name, Price: input.Price}
 }
 
 func mapDBItemToBItem(input model.DBItem) model.BItem {

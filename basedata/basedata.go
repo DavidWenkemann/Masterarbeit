@@ -13,9 +13,11 @@ func AddProduct(ean string, name string, price float64) model.BProduct {
 	var p model.BProduct
 	//checks if there is an product with that ean. If not an empty product will
 	//be returned and the new product will be added
-	if database.GetProductByEan(ean) != p {
+	if database.GetProductByEan(ean).EAN != ean {
 		p = database.NewProduct(ean, name, price)
 	}
+	//TODO: Edit the product if its otherwise
+
 	return p
 }
 

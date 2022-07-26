@@ -200,8 +200,10 @@ func (m modelUI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 				if statusBasedata == "delete" {
 					query := strings.TrimSpace(m.textInput.Value())
-					basedata.RemoveProduct(query)
-
+					if database.GetProductByEan(query).EAN != query {
+						basedata.RemoveProduct(query)
+					}
+					m.textInput.Reset()
 					statusBasedata = "table"
 				}
 
