@@ -31,7 +31,7 @@ func WarehouseUI(m modelUI) string {
 	if statusWarehouse == "scan" {
 		alert = lipgloss.NewStyle().Width(50).Align(lipgloss.Center).Render("Scan EAN to stock the bottle" + fmt.Sprintf(" %s", m.textInput.View()))
 	} else if statusWarehouse == "alert" {
-		alert = lipgloss.NewStyle().Width(50).Align(lipgloss.Center).Render(fmt.Sprintf("Item: %s %s was added to stock", m.lastStocked.EAN, m.lastStocked.Name))
+		alert = lipgloss.NewStyle().Width(50).Align(lipgloss.Center).Render(fmt.Sprintf("%s was added to stock", m.lastStocked.Name))
 	} else if statusWarehouse == "failure" {
 		alert = lipgloss.NewStyle().Width(50).Align(lipgloss.Center).Render(fmt.Sprintf("Could not stock item - try again! \n %s", m.spinner.View()))
 	}

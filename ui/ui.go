@@ -80,7 +80,7 @@ func initialModel() modelUI {
 
 		//Reporting
 		reportingTable: table.New([]table.Column{
-			table.NewColumn(columnKeyReporting1, "EAN", 13),
+			table.NewColumn(columnKeyReporting1, "EAN", 15),
 			table.NewColumn(columnKeyReporting2, "Name", 25),
 			table.NewColumn(columnKeyReporting3, "Price", 6),
 			table.NewColumn(columnKeyReporting4, "Quantity", 5),
@@ -88,7 +88,7 @@ func initialModel() modelUI {
 
 		//Basedata
 		basedataTable: table.New([]table.Column{
-			table.NewColumn(columnKeyBasedata1, "EAN", 13),
+			table.NewColumn(columnKeyBasedata1, "EAN", 16),
 			table.NewColumn(columnKeyBasedata2, "Name", 25),
 			table.NewColumn(columnKeyBasedata3, "Price", 6),
 		}),
@@ -113,7 +113,7 @@ func (m modelUI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	//Key bindings for tab store
 	switch m.selectedTab {
-	case 0:
+	case 0: //Store
 		switch msg := msg.(type) {
 		case tea.KeyMsg:
 			switch msg.String() {
@@ -152,7 +152,7 @@ func (m modelUI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 		}
-	case 1:
+	case 1: //Warehouse
 		switch msg := msg.(type) {
 
 		case tea.KeyMsg:
@@ -170,6 +170,10 @@ func (m modelUI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				} else {
 					statusWarehouse = "failure"
 				}
+			case " ":
+				if statusWarehouse == "alert" || statusWarehouse == "failure" {
+					statusWarehouse = "scan"
+				}
 			}
 		}
 
@@ -179,15 +183,24 @@ func (m modelUI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch msg.String() {
 			case "enter":
 				query := m.textInput.Value()
+				m.textInput.Placeholder = ""
+
 				if statusBasedata == "addEAN" {
 					m.newProduct.EAN = query
 					m.textInput.Reset()
+					if database.GetProductByEan(m.newProduct.EAN).ProductID != 0 {
+						m.textInput.Placeholder = database.GetProductByEan(m.newProduct.EAN).Name
+					}
 					statusBasedata = "addName"
 				} else if statusBasedata == "addName" {
 					m.newProduct.Name = strings.TrimSpace(m.textInput.Value())
 					m.textInput.Reset()
+					if database.GetProductByEan(m.newProduct.EAN).ProductID != 0 {
+						m.textInput.Placeholder = fmt.Sprintf("%.2f€", database.GetProductByEan(m.newProduct.EAN).Price)
+					}
 					statusBasedata = "addPrice"
 				} else if statusBasedata == "addPrice" {
+
 					query = strings.TrimSpace(m.textInput.Value())
 					m.textInput.Reset()
 
@@ -200,7 +213,7 @@ func (m modelUI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 				if statusBasedata == "delete" {
 					query := strings.TrimSpace(m.textInput.Value())
-					if database.GetProductByEan(query).EAN != query {
+					if database.GetProductByEan(query).ProductID != 0 {
 						basedata.RemoveProduct(query)
 					}
 					m.textInput.Reset()

@@ -42,6 +42,20 @@ func newProduct(ean string, name string, price float64) model.DBProduct {
 	return p
 }
 
+func EditProduct(ean string, name string, price float64) model.DBProduct {
+
+	p := model.DBProduct{}
+
+	for i := range products {
+		if ean == products[i].EAN {
+			products[i].Name = name
+			products[i].Price = price
+			p = products[i]
+		}
+	}
+	return p
+}
+
 //internal function. adds item to db (with oldItem-Function) and returns it. Not possible to use a timeSelled
 func newItem(pID int) model.DBItem {
 	return oldItem(pID, time.Now(), nil)
@@ -103,6 +117,7 @@ func NewProduct(ean string, name string, price float64) model.BProduct {
 //returns businessmodel of product with specific ean. If not available returns nil
 func GetProductByEan(ean string) model.BProduct {
 	var p model.BProduct
+	p.ProductID = 0
 	for i := range products {
 		if ean == products[i].EAN {
 			p = mapDBProductToBProduct(products[i])
@@ -132,6 +147,7 @@ func RemoveProductByEan(ean string) {
 			products = products[:len(products)-1]   // Truncate slice.
 		}
 	}
+	p.EAN = ""
 }
 
 //public function to add an item to data table. New Product ID will be returned

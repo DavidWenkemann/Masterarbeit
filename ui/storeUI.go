@@ -50,9 +50,8 @@ func generateRowsFromCart(refreshedcart []model.APIItem, m modelUI) []table.Row 
 func StoreUI(m modelUI) string {
 
 	doc := strings.Builder{}
-
-	//m.textInput.SetCursor(0)
-
+	m.textInput.CharLimit = 13
+	m.textInput.SetCursorMode(2)
 	/*
 		// Status bar
 		{

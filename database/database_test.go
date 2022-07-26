@@ -169,12 +169,38 @@ func TestGetProductByEan(t *testing.T) {
 				ean: dbp3.EAN,
 			},
 			want: mapDBProductToBProduct(dbp3),
-		}}
+		},
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := GetProductByEan(tt.args.ean); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("GetProductByEan() = %v, want %v", got, tt.want)
 			}
+		})
+	}
+}
+
+func TestRemoveProductByEan(t *testing.T) {
+	newProduct("4011803092174", "Spezi", 0.75)
+	newProduct("4066600641919", "Paulaner Hefeweizen", 1.39)
+	newProduct("4029764001807", "Clubmate", 2.50)
+
+	type args struct {
+		ean string
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		{
+			name: "DeleteWeizen",
+			args: args{
+				ean: "4066600641919",
+			},
+		}}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			RemoveProductByEan(tt.args.ean)
 		})
 	}
 }
