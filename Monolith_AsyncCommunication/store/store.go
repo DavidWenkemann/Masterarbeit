@@ -1,11 +1,17 @@
 package store
 
 import (
-	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/database"
-	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/model"
+	//"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/database"
+	//"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/model"
+
+	reportingdb "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/database"
+	storedb "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/database"
+
+	reportingmodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/model"
+	storemodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/model"
 )
 
-var cart = []model.BItem{}
+var cart = []storemodel.BItem{}
 
 //adds product to the cart
 func AddToCart(itemID string) {
@@ -22,7 +28,7 @@ func SellCart() {
 
 //removes everything of the cart
 func ClearCart() {
-	var clear []model.BItem
+	var clear []storemodel.BItem
 	cart = clear
 }
 
@@ -35,11 +41,7 @@ func GetPriceOfCart() float64 {
 }
 
 //Converts Cart to API cart and returns it
-func GetCart() []model.BItem {
-	//var cartAPI []model.APIItem
-	//for i := range cart {
-	//	cartAPI = append(cartAPI, mapBItemToAPIItem(cart[i]))
-	//}
+func GetCart() []storemodel.BItem {
 	return cart
 }
 
@@ -48,16 +50,20 @@ func GetCart() []model.BItem {
 //Connection to DatabaseLayer
 **
 */
-func GetProductByID(id int) model.BProduct {
-	return mapDBProductToBProduct(database.GetProductByID(id))
+
+//Get functions
+func GetProductByID(id int) storemodel.BProduct {
+	return mapStoreDBProductToStoreBProduct(storedb.GetProductByID(id))
 }
 
+func GetItemById(itemID string) storemodel.BItem {
+	return mapStoreDBItemToStoreBItem(storedb.GetItemById(itemID))
+}
+
+//Set functions
 func SetItemSelledDate(itemID string) {
-	database.SetItemSelledDate(itemID)
-}
-
-func GetItemById(itemID string) model.BItem {
-	return mapDBItemToBItem(database.GetItemById(itemID))
+	editedItem := storedb.SetItemSelledDate(itemID)
+	reportingdb.ReceiveEditItem(mapStoreDBItemToReportingDBItem(editedItem))
 }
 
 /*
@@ -65,19 +71,23 @@ func GetItemById(itemID string) model.BItem {
 Mapping DB Model -> B Model
 **
 */
-func mapDBProductToBProduct(input model.DBProduct) model.BProduct {
-	return model.BProduct{ProductID: input.ProductID, EAN: input.EAN, Name: input.Name, Price: input.Price}
+func mapStoreDBProductToStoreBProduct(input storemodel.DBProduct) storemodel.BProduct {
+	return storemodel.BProduct{ProductID: input.ProductID, EAN: input.EAN, Name: input.Name, Price: input.Price}
 }
 
-func mapDBProductSliceToBProductSlice(input []model.DBProduct) []model.BProduct {
+func mapStoreDBProductSliceToStoreBProductSlice(input []storemodel.DBProduct) []storemodel.BProduct {
 
-	var output []model.BProduct
+	var output []storemodel.BProduct
 	for i := range input {
-		output = append(output, mapDBProductToBProduct(input[i]))
+		output = append(output, mapStoreDBProductToStoreBProduct(input[i]))
 	}
 	return output
 }
 
-func mapDBItemToBItem(input model.DBItem) model.BItem {
-	return model.BItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+func mapStoreDBItemToStoreBItem(input storemodel.DBItem) storemodel.BItem {
+	return storemodel.BItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+}
+
+func mapStoreDBItemToReportingDBItem(input storemodel.DBItem) reportingmodel.DBItem {
+	return reportingmodel.DBItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
 }

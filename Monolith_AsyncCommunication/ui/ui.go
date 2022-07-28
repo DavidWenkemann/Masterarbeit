@@ -6,8 +6,12 @@ import (
 	"strconv"
 	"strings"
 
+	basedatamodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/basedata/model"
+	storemodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/model"
+	warehousemodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/warehouse/model"
+
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/basedata"
-	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/model"
+	//"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/model"
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store"
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/warehouse"
 	"github.com/charmbracelet/bubbles/spinner"
@@ -31,7 +35,7 @@ type modelUI struct {
 	selectedOption int
 
 	//Warehouse
-	lastStocked model.APIProduct
+	lastStocked warehousemodel.APIProduct
 
 	//Reporting
 	reportingTable table.Model //for bubble table
@@ -39,7 +43,7 @@ type modelUI struct {
 	//Basedata
 	basedataTable          table.Model //for bubble table
 	selectedOptionBasedata int
-	newProduct             model.APIProduct
+	newProduct             basedatamodel.APIProduct
 
 	//Textinput
 	textInput textinput.Model
@@ -164,7 +168,7 @@ func (m modelUI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.lastStocked = mapBProductToAPIProduct(warehouse.GetProductByEan(query))
 
 				//if ean available -> stock, if not failure
-				var p model.APIProduct
+				var p warehousemodel.APIProduct
 				if m.lastStocked != p {
 					warehouse.StockProduct(m.lastStocked.EAN)
 					statusWarehouse = "alert"
@@ -343,9 +347,10 @@ func StartUI() {
 
 }
 
+/*
 //Helper Functions
-func mapBProductToAPIProduct(input model.BProduct) model.APIProduct {
-	return model.APIProduct{EAN: input.EAN, Name: input.Name, Price: input.Price}
+func mapBProductToAPIProduct(input warehousemodel.BProduct) warehousemodel.APIProduct {
+	return warehousemodel.APIProduct{EAN: input.EAN, Name: input.Name, Price: input.Price}
 }
 
 func mapBItemToAPIItem(input model.BItem) model.APIItem {
@@ -357,6 +362,24 @@ func mapBItemSliceToAPIItemSlice(input []model.BItem) []model.APIItem {
 	var output []model.APIItem
 	for i := range input {
 		output = append(output, mapBItemToAPIItem(input[i]))
+	}
+	return output
+}
+*/
+
+func mapBProductToAPIProduct(input warehousemodel.BProduct) warehousemodel.APIProduct {
+	return warehousemodel.APIProduct{EAN: input.EAN, Name: input.Name, Price: input.Price}
+}
+
+func mapStoreBItemToStoreAPIItem(input storemodel.BItem) storemodel.APIItem {
+	return storemodel.APIItem{Product: storemodel.APIProduct(store.GetProductByID(input.ProductID)), ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+}
+
+func mapStoreBItemSliceToStoreAPIItemSlice(input []storemodel.BItem) []storemodel.APIItem {
+
+	var output []storemodel.APIItem
+	for i := range input {
+		output = append(output, mapStoreBItemToStoreAPIItem(input[i]))
 	}
 	return output
 }

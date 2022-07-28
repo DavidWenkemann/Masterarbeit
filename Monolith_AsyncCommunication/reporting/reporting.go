@@ -5,8 +5,8 @@
 package reporting
 
 import (
-	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/database"
-	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/model"
+	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/database"
+	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/model"
 )
 
 func GetItemsInStockByEan(ean string) int {

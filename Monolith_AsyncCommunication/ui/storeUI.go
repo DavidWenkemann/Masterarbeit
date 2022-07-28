@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/model"
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store"
+	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/model"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/evertras/bubble-table/table"
 )
@@ -115,7 +115,7 @@ func StoreUI(m modelUI) string {
 
 	if statusStore == "scan" {
 		//Cart
-		m.cartTable = m.cartTable.WithRows(generateRowsFromCart(mapBItemSliceToAPIItemSlice(store.GetCart()), m))
+		m.cartTable = m.cartTable.WithRows(generateRowsFromCart(mapStoreBItemSliceToStoreAPIItemSlice(store.GetCart()), m))
 
 		var tableStyle = lipgloss.NewStyle().
 			MarginLeft(1)

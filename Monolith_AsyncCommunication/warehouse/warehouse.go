@@ -5,22 +5,27 @@
 package warehouse
 
 import (
-	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/database"
-	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/model"
+	reportingdb "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/database"
+	storedb "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/database"
+	warehousedb "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/warehouse/database"
+
+	reportingmodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/model"
+	storemodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/model"
+	warehousemodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/warehouse/model"
 )
 
 // checks if there is an product with that ean. If not an empty product will
 // be returned and also an empty ItemID
 // if ean is existing the new item will be added and new itemID returned
-func StockProduct(ean string) string {
+func StockProduct(ean string) warehousemodel.BItem {
 
-	var newItemID string
+	var newItem warehousemodel.BItem
 	product := GetProductByEan(ean)
 
 	if product.EAN == ean {
-		newItemID = NewItem(product.ProductID)
+		newItem = NewItem(product.ProductID)
 	}
-	return newItemID
+	return newItem
 
 }
 
@@ -29,12 +34,21 @@ func StockProduct(ean string) string {
 //Connection to DatabaseLayer
 **
 */
-func GetProductByEan(ean string) model.BProduct {
-	return mapDBProductToBProduct(database.GetProductByEan(ean))
+
+//Get Functions
+func GetProductByEan(ean string) warehousemodel.BProduct {
+	return mapWarehouseDBProductToWarehouseBProduct(warehousedb.GetProductByEan(ean))
 }
 
-func NewItem(pID int) string {
-	return database.NewItem(pID)
+//SetFunctions
+func NewItem(pID int) warehousemodel.BItem {
+	newItem := warehousedb.NewItem(pID)
+
+	//Send to other DBs
+	reportingdb.ReceiveNewItem(mapWarehouseDBItemToReportingDBItem(newItem))
+	storedb.ReceiveNewItem(mapWarehouseDBItemToStoreDBItem(newItem))
+
+	return mapWarehouseDBItemToWarehouseBItem(newItem)
 }
 
 /*
@@ -42,6 +56,18 @@ func NewItem(pID int) string {
 Mapping DB Model -> B Model
 **
 */
-func mapDBProductToBProduct(input model.DBProduct) model.BProduct {
-	return model.BProduct{ProductID: input.ProductID, EAN: input.EAN, Name: input.Name, Price: input.Price}
+func mapWarehouseDBProductToWarehouseBProduct(input warehousemodel.DBProduct) warehousemodel.BProduct {
+	return warehousemodel.BProduct{ProductID: input.ProductID, EAN: input.EAN, Name: input.Name, Price: input.Price}
+}
+
+func mapWarehouseDBItemToWarehouseBItem(input warehousemodel.DBItem) warehousemodel.BItem {
+	return warehousemodel.BItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+}
+
+func mapWarehouseDBItemToReportingDBItem(input warehousemodel.DBItem) reportingmodel.DBItem {
+	return reportingmodel.DBItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+}
+
+func mapWarehouseDBItemToStoreDBItem(input warehousemodel.DBItem) storemodel.DBItem {
+	return storemodel.DBItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
 }
