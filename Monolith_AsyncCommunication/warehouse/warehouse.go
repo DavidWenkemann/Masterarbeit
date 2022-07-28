@@ -6,6 +6,7 @@ package warehouse
 
 import (
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/database"
+	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/model"
 )
 
 // checks if there is an product with that ean. If not an empty product will
@@ -14,11 +15,33 @@ import (
 func StockProduct(ean string) string {
 
 	var newItemID string
-	product := database.GetProductByEan(ean)
+	product := GetProductByEan(ean)
 
 	if product.EAN == ean {
-		newItemID = database.NewItem(product.ProductID)
+		newItemID = NewItem(product.ProductID)
 	}
 	return newItemID
 
+}
+
+/*
+**
+//Connection to DatabaseLayer
+**
+*/
+func GetProductByEan(ean string) model.BProduct {
+	return mapDBProductToBProduct(database.GetProductByEan(ean))
+}
+
+func NewItem(pID int) string {
+	return database.NewItem(pID)
+}
+
+/*
+**
+Mapping DB Model -> B Model
+**
+*/
+func mapDBProductToBProduct(input model.DBProduct) model.BProduct {
+	return model.BProduct{ProductID: input.ProductID, EAN: input.EAN, Name: input.Name, Price: input.Price}
 }

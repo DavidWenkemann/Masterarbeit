@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/database"
+	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/evertras/bubble-table/table"
 )
@@ -20,12 +20,12 @@ const (
 func generateRowsFromStock() []table.Row {
 	rows := []table.Row{}
 
-	for i := 0; i <= len(database.GetAllProducts())-1; i++ {
+	for i := 0; i <= len(reporting.GetAllProducts())-1; i++ {
 		row := table.NewRow(table.RowData{
-			columnKeyReporting1: database.GetAllProducts()[i].EAN,
-			columnKeyReporting2: database.GetAllProducts()[i].Name,
-			columnKeyReporting3: fmt.Sprintf("%.2f€", database.GetAllProducts()[i].Price),
-			columnKeyReporting4: database.GetItemsInStockByEan(database.GetAllProducts()[i].EAN),
+			columnKeyReporting1: reporting.GetAllProducts()[i].EAN,
+			columnKeyReporting2: reporting.GetAllProducts()[i].Name,
+			columnKeyReporting3: fmt.Sprintf("%.2f€", reporting.GetAllProducts()[i].Price),
+			columnKeyReporting4: reporting.GetItemsInStockByEan(reporting.GetAllProducts()[i].EAN),
 		})
 		rows = append(rows, row)
 	}

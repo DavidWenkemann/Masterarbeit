@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/basedata"
-	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/database"
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/model"
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store"
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/warehouse"
@@ -162,7 +161,7 @@ func (m modelUI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				//query := truncate.Truncate(strings.TrimSpace(m.textInput.Value()), 14, "", truncate.PositionEnd) //	"github.com/aquilax/truncate"
 
 				m.textInput.Reset()
-				m.lastStocked = mapBProductToAPIProduct(database.GetProductByEan(query))
+				m.lastStocked = mapBProductToAPIProduct(warehouse.GetProductByEan(query))
 
 				//if ean available -> stock, if not failure
 				var p model.APIProduct
@@ -192,15 +191,15 @@ func (m modelUI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					//m.newProduct.EAN = truncate.Truncate(query, 14, "", truncate.PositionEnd) //	"github.com/aquilax/truncate"
 
 					m.textInput.Reset()
-					if database.GetProductByEan(m.newProduct.EAN).ProductID != 0 {
-						m.textInput.Placeholder = database.GetProductByEan(m.newProduct.EAN).Name
+					if basedata.GetProductByEan(m.newProduct.EAN).ProductID != 0 {
+						m.textInput.Placeholder = basedata.GetProductByEan(m.newProduct.EAN).Name
 					}
 					statusBasedata = "addName"
 				} else if statusBasedata == "addName" {
 					m.newProduct.Name = strings.TrimSpace(m.textInput.Value())
 					m.textInput.Reset()
-					if database.GetProductByEan(m.newProduct.EAN).ProductID != 0 {
-						m.textInput.Placeholder = fmt.Sprintf("%.2f€", database.GetProductByEan(m.newProduct.EAN).Price)
+					if basedata.GetProductByEan(m.newProduct.EAN).ProductID != 0 {
+						m.textInput.Placeholder = fmt.Sprintf("%.2f€", basedata.GetProductByEan(m.newProduct.EAN).Price)
 					}
 					statusBasedata = "addPrice"
 				} else if statusBasedata == "addPrice" {
@@ -218,8 +217,8 @@ func (m modelUI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				if statusBasedata == "delete" {
 					query := strings.TrimSpace(m.textInput.Value())
 					//query := truncate.Truncate(strings.TrimSpace(m.textInput.Value()), 14, "", truncate.PositionEnd)
-					if database.GetProductByEan(query).ProductID != 0 {
-						basedata.RemoveProduct(query)
+					if basedata.GetProductByEan(query).ProductID != 0 {
+						basedata.RemoveProductByEan(query)
 					}
 					m.textInput.Reset()
 					statusBasedata = "table"
@@ -347,4 +346,17 @@ func StartUI() {
 //Helper Functions
 func mapBProductToAPIProduct(input model.BProduct) model.APIProduct {
 	return model.APIProduct{EAN: input.EAN, Name: input.Name, Price: input.Price}
+}
+
+func mapBItemToAPIItem(input model.BItem) model.APIItem {
+	return model.APIItem{Product: model.APIProduct(store.GetProductByID(input.ProductID)), ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+}
+
+func mapBItemSliceToAPIItemSlice(input []model.BItem) []model.APIItem {
+
+	var output []model.APIItem
+	for i := range input {
+		output = append(output, mapBItemToAPIItem(input[i]))
+	}
+	return output
 }
