@@ -5,6 +5,8 @@
 package database
 
 import (
+	"time"
+
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/model"
 )
 
@@ -96,4 +98,13 @@ func ReceiveEditItem(item model.DBItem) {
 
 func ReceiveNewItem(newItem model.DBItem) {
 	items = append(items, newItem)
+}
+
+func ReceiveSellItem(itemid string, selledTime time.Time) {
+	for i := range items {
+		if itemid == items[i].ItemID {
+			items[i].SellingDate = selledTime
+		}
+	}
+
 }

@@ -5,8 +5,6 @@
 package database
 
 import (
-	"time"
-
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/model"
 )
 
@@ -52,6 +50,7 @@ func GetItemById(itemID string) model.DBItem {
 	return item
 }
 
+/*
 func SetItemSelledDate(itemID string) model.DBItem {
 
 	var item model.DBItem
@@ -64,6 +63,7 @@ func SetItemSelledDate(itemID string) model.DBItem {
 
 	return item
 }
+*/
 
 /*
 **

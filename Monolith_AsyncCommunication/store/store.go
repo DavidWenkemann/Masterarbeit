@@ -4,10 +4,11 @@ import (
 	//"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/database"
 	//"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/model"
 
+	"time"
+
 	reportingdb "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/database"
 	storedb "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/database"
 
-	reportingmodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/model"
 	storemodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/model"
 )
 
@@ -62,8 +63,10 @@ func GetItemById(itemID string) storemodel.BItem {
 
 //Set functions
 func SetItemSelledDate(itemID string) {
-	editedItem := storedb.SetItemSelledDate(itemID)
-	reportingdb.ReceiveEditItem(mapStoreDBItemToReportingDBItem(editedItem))
+	//editedItem := mapStoreDBItemToReportingDBItem(GetItemById(itemID))
+	//editedItem.ReceivingDate
+
+	reportingdb.ReceiveSellItem(itemID, time.Now())
 }
 
 /*
@@ -85,9 +88,11 @@ func mapStoreDBProductSliceToStoreBProductSlice(input []storemodel.DBProduct) []
 }
 
 func mapStoreDBItemToStoreBItem(input storemodel.DBItem) storemodel.BItem {
-	return storemodel.BItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+	return storemodel.BItem{ProductID: input.ProductID, ItemID: input.ItemID}
 }
 
+/*
 func mapStoreDBItemToReportingDBItem(input storemodel.DBItem) reportingmodel.DBItem {
-	return reportingmodel.DBItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+	return reportingmodel.DBItem{ProductID: input.ProductID, ItemID: input.ItemID}
 }
+*/
