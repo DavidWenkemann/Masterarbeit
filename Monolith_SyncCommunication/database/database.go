@@ -102,8 +102,6 @@ func SpinupDB() {
 	items = append(items, oldItem(3, time.Now().Add(-54*time.Hour), nil))
 	items = append(items, oldItem(3, time.Now().Add(-827*time.Hour), nil))
 
-	//items[0].ItemID = "4005906003427"
-
 	//fmt.Printf("%v", products)
 	//fmt.Printf("%v", items)
 
@@ -116,31 +114,31 @@ Public Functions
 */
 
 //add an product to data table
-func NewProduct(ean string, name string, price float64) model.BProduct {
+func NewProduct(ean string, name string, price float64) model.DBProduct {
 	p := newProduct(ean, name, price)
 	products = append(products, p) //Insert into DB
 
-	return mapDBProductToBProduct(p)
+	return p
 }
 
 //returns businessmodel of product with specific ean. If not available returns nil
-func GetProductByEan(ean string) model.BProduct {
-	var p model.BProduct
+func GetProductByEan(ean string) model.DBProduct {
+	var p model.DBProduct
 	p.ProductID = 0
 	for i := range products {
 		if ean == products[i].EAN {
-			p = mapDBProductToBProduct(products[i])
+			p = products[i]
 		}
 	}
 	return p
 }
 
 //returns businessmodel of product with specific id. If not available returns nil
-func GetProductByID(id int) model.BProduct {
-	var p model.BProduct
+func GetProductByID(id int) model.DBProduct {
+	var p model.DBProduct
 	for i := range products {
 		if id == products[i].ProductID {
-			p = mapDBProductToBProduct(products[i])
+			p = products[i]
 		}
 	}
 	return p
@@ -151,9 +149,6 @@ func RemoveProductByEan(ean string) {
 	var p model.DBProduct //emtpy product to overwrite the last element
 	for i := range products {
 		if ean == products[i].EAN {
-			//products[i] = products[len(products)-1] // Copy last element to index i.
-			//products[len(products)-1] = p           // Erase last element (write zero value).
-			//products = products[:len(products)-1]   // Truncate slice.
 
 			// Remove the element at index i from product.
 			copy(products[i:], products[i+1:])    // Shift a[i+1:] left one index.
@@ -172,42 +167,37 @@ func NewItem(pID int) string {
 	return i.ItemID
 }
 
-func GetItemsInStockByEan(ean string) int {
-
-	var count int
-	pID := GetProductByEan(ean).ProductID
-
-	//TODO: funktioniert wohl ncch nicht mit time
-
-	for i := range items {
-		if pID == items[i].ProductID && items[i].SellingDate.IsZero() {
-			count++
-		}
-	}
-
-	return count
-}
-
-func GetItemById(itemID string) model.BItem {
-	var item model.BItem
+func GetItemById(itemID string) model.DBItem {
+	var item model.DBItem
 	for i := range items {
 		if itemID == items[i].ItemID {
-			item = mapDBItemToBItem(items[i])
+			item = items[i]
 		}
 	}
 	return item
 }
 
 //Maps all products to businessproducts and returns them
-func GetAllProducts() []model.BProduct {
+func GetAllProducts() []model.DBProduct {
 
-	var businessProducts []model.BProduct
+	//var products []model.DBProduct
 
-	for i := range products {
-		businessProducts = append(businessProducts, mapDBProductToBProduct(products[i]))
-	}
+	//for i := range products {
+	//	products = append(products, mapDBProductToBProduct(products[i]))
+	//}
 
-	return businessProducts
+	return products
+}
+
+func GetAllItems() []model.DBItem {
+
+	//var products []model.DBProduct
+
+	//for i := range products {
+	//	products = append(products, mapDBProductToBProduct(products[i]))
+	//}
+
+	return items
 }
 
 func SetItemSelledDate(itemID string) {
@@ -220,18 +210,9 @@ func SetItemSelledDate(itemID string) {
 
 /*
 **
-Helper and Mapping Functions
+Helper Functions
 **
 */
-
-//maps DB-Products to B-Products
-func mapDBProductToBProduct(input model.DBProduct) model.BProduct {
-	return model.BProduct{ProductID: input.ProductID, EAN: input.EAN, Name: input.Name, Price: input.Price}
-}
-
-func mapDBItemToBItem(input model.DBItem) model.BItem {
-	return model.BItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
-}
 
 //helper function to convert a time into a pointer
 func timePtr(t time.Time) *time.Time {

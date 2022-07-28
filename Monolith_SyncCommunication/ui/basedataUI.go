@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DavidWenkemann/Masterarbeit/Monolith_SyncCommunication/database"
+	"github.com/DavidWenkemann/Masterarbeit/Monolith_SyncCommunication/basedata"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/evertras/bubble-table/table"
 )
@@ -19,11 +19,11 @@ const (
 func generateRows() []table.Row {
 	rows := []table.Row{}
 
-	for i := 0; i <= len(database.GetAllProducts())-1; i++ {
+	for i := 0; i <= len(basedata.GetAllProducts())-1; i++ {
 		row := table.NewRow(table.RowData{
-			columnKeyBasedata1: database.GetAllProducts()[i].EAN,
-			columnKeyBasedata2: database.GetAllProducts()[i].Name,
-			columnKeyBasedata3: fmt.Sprintf("%.2f€", database.GetAllProducts()[i].Price),
+			columnKeyBasedata1: basedata.GetAllProducts()[i].EAN,
+			columnKeyBasedata2: basedata.GetAllProducts()[i].Name,
+			columnKeyBasedata3: fmt.Sprintf("%.2f€", basedata.GetAllProducts()[i].Price),
 		})
 		rows = append(rows, row)
 	}

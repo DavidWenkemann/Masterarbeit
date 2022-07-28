@@ -115,7 +115,7 @@ func StoreUI(m modelUI) string {
 
 	if statusStore == "scan" {
 		//Cart
-		m.cartTable = m.cartTable.WithRows(generateRowsFromCart(store.GetCart(), m))
+		m.cartTable = m.cartTable.WithRows(generateRowsFromCart(mapBItemSliceToAPIItemSlice(store.GetCart()), m))
 
 		var tableStyle = lipgloss.NewStyle().
 			MarginLeft(1)

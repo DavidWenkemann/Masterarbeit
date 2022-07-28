@@ -60,6 +60,7 @@ func Test_oldItem(t *testing.T) {
 	}
 }
 
+/*
 func TestGetItemsInStockByEan(t *testing.T) {
 
 	//newProduct("4011803092174", "Spezi", 0.75)
@@ -101,6 +102,7 @@ func TestGetItemsInStockByEan(t *testing.T) {
 		})
 	}
 }
+*/
 
 func TestGetProductByID(t *testing.T) {
 
@@ -114,7 +116,7 @@ func TestGetProductByID(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want model.BProduct
+		want model.DBProduct
 	}{
 		// TODO: Add test cases.
 
@@ -123,14 +125,14 @@ func TestGetProductByID(t *testing.T) {
 			args: args{
 				id: dbp.ProductID,
 			},
-			want: mapDBProductToBProduct(dbp),
+			want: dbp,
 		},
 		{
 			name: "getMate",
 			args: args{
 				id: dbp3.ProductID,
 			},
-			want: mapDBProductToBProduct(dbp3),
+			want: dbp3,
 		},
 	}
 	for _, tt := range tests {
@@ -154,21 +156,21 @@ func TestGetProductByEan(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want model.BProduct
+		want model.DBProduct
 	}{
 		{
 			name: "getSpezi",
 			args: args{
 				ean: dbp.EAN,
 			},
-			want: mapDBProductToBProduct(dbp),
+			want: dbp,
 		},
 		{
 			name: "getMate",
 			args: args{
 				ean: dbp3.EAN,
 			},
-			want: mapDBProductToBProduct(dbp3),
+			want: dbp3,
 		},
 	}
 	for _, tt := range tests {

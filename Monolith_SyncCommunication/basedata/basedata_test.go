@@ -7,13 +7,12 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/DavidWenkemann/Masterarbeit/Monolith_SyncCommunication/database"
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_SyncCommunication/model"
 )
 
 func TestAddProduct(t *testing.T) {
 
-	database.NewProduct("4011803092174", "Spezi", 0.75)
+	NewProduct("4011803092174", "Spezi", 0.75)
 
 	type args struct {
 		ean   string
@@ -32,7 +31,7 @@ func TestAddProduct(t *testing.T) {
 				name:  "Mate",
 				price: 1.0,
 			},
-			want: database.GetProductByEan("4029764001807"),
+			want: GetProductByEan("4029764001807"),
 		},
 	}
 	for _, tt := range tests {
@@ -57,7 +56,7 @@ func TestRemoveProduct(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			RemoveProduct(tt.args.ean)
+			RemoveProductByEan(tt.args.ean)
 		})
 	}
 }
