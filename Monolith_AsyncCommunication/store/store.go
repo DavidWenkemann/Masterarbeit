@@ -6,8 +6,9 @@ import (
 
 	"time"
 
-	reportingdb "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/database"
 	storedb "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/database"
+
+	communication "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/communication"
 
 	storemodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/model"
 )
@@ -63,10 +64,9 @@ func GetItemById(itemID string) storemodel.BItem {
 
 //Set functions
 func SetItemSelledDate(itemID string) {
-	//editedItem := mapStoreDBItemToReportingDBItem(GetItemById(itemID))
-	//editedItem.ReceivingDate
-
-	reportingdb.ReceiveSellItem(itemID, time.Now())
+	sendItem := GetItemById(itemID)
+	sendItem.SellingDate = time.Now()
+	communication.SendEditItem(sendItem) //reportingdb.ReceiveEditProduct(mapBasedataDBProductToReportingDBProduct(editedProduct))
 }
 
 /*

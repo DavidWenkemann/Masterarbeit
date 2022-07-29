@@ -5,8 +5,7 @@
 package warehouse
 
 import (
-	reportingdb "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/database"
-	storedb "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/database"
+	communication "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/warehouse/communication"
 	warehousedb "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/warehouse/database"
 
 	reportingmodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/model"
@@ -45,8 +44,7 @@ func NewItem(pID int) warehousemodel.BItem {
 	newItem := warehousedb.NewItem(pID)
 
 	//Send to other DBs
-	reportingdb.ReceiveNewItem(mapWarehouseDBItemToReportingDBItem(newItem))
-	storedb.ReceiveNewItem(mapWarehouseDBItemToStoreDBItem(newItem))
+	communication.SendNewItem(mapWarehouseDBItemToWarehouseBItem(newItem))
 
 	return mapWarehouseDBItemToWarehouseBItem(newItem)
 }
@@ -69,5 +67,5 @@ func mapWarehouseDBItemToReportingDBItem(input warehousemodel.DBItem) reportingm
 }
 
 func mapWarehouseDBItemToStoreDBItem(input warehousemodel.DBItem) storemodel.DBItem {
-	return storemodel.DBItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+	return storemodel.DBItem{ProductID: input.ProductID, ItemID: input.ItemID}
 }

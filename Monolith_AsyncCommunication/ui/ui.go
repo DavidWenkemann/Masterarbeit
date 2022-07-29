@@ -11,7 +11,6 @@ import (
 	warehousemodel "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/warehouse/model"
 
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/basedata"
-	//"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/model"
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store"
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/warehouse"
 	"github.com/charmbracelet/bubbles/spinner"
@@ -87,6 +86,7 @@ func initialModel() modelUI {
 			table.NewColumn(columnKeyReporting2, "Name", 25),
 			table.NewColumn(columnKeyReporting3, "Price", 6),
 			table.NewColumn(columnKeyReporting4, "Quantity", 5),
+			table.NewColumn(columnKeyReporting5, "ID", 5),
 		}),
 
 		//Basedata
@@ -222,7 +222,7 @@ func (m modelUI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					query := strings.TrimSpace(m.textInput.Value())
 					//query := truncate.Truncate(strings.TrimSpace(m.textInput.Value()), 14, "", truncate.PositionEnd)
 					if basedata.GetProductByEan(query).ProductID != 0 {
-						basedata.RemoveProductByEan(query)
+						basedata.RemoveProductByEan(basedata.GetProductByEan(query).ProductID)
 					}
 					m.textInput.Reset()
 					statusBasedata = "table"
@@ -372,7 +372,7 @@ func mapBProductToAPIProduct(input warehousemodel.BProduct) warehousemodel.APIPr
 }
 
 func mapStoreBItemToStoreAPIItem(input storemodel.BItem) storemodel.APIItem {
-	return storemodel.APIItem{Product: storemodel.APIProduct(store.GetProductByID(input.ProductID)), ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+	return storemodel.APIItem{Product: storemodel.APIProduct(store.GetProductByID(input.ProductID)), ItemID: input.ItemID}
 }
 
 func mapStoreBItemSliceToStoreAPIItemSlice(input []storemodel.BItem) []storemodel.APIItem {

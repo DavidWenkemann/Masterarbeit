@@ -97,14 +97,16 @@ func ReceiveEditProduct(editedProduct model.DBProduct) {
 	}
 }
 
-func ReceiveRemoveProduct(ean string) {
+func ReceiveRemoveProduct(id int) {
 	var p model.DBProduct //emtpy product to overwrite the last element
 	for i := range products {
-		if ean == products[i].EAN {
-			// Remove the element at index i from product.
-			copy(products[i:], products[i+1:])    // Shift a[i+1:] left one index.
-			products[len(products)-1] = p         // Erase last element (write zero value).
-			products = products[:len(products)-1] // Truncate slice.
+		if id == products[i].ProductID {
+
+			copy(products[i:], products[i+1:])    // shift valuesafter the indexwith a factor of 1
+			products[len(products)-1] = p         // remove element
+			products = products[:len(products)-1] // truncateslice
+
+			return
 		}
 
 	}

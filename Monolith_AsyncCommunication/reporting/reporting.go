@@ -5,6 +5,8 @@
 package reporting
 
 import (
+	"fmt"
+
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/database"
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/model"
 )
@@ -39,7 +41,12 @@ func GetAllItems() []model.BItem {
 }
 
 func GetProductByEan(ean string) model.DBProduct {
-	return database.GetProductByEan(ean)
+	product, err := database.GetProductByEan(ean)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return product
+
 }
 
 /*

@@ -19,12 +19,6 @@ var products = []model.DBProduct{} //pruducts emulates a Database table with 4 c
 
 /*
 **
-Internal Functions
-**
-*/
-
-/*
-**
 Public Functions
 **
 */
@@ -42,12 +36,25 @@ func GetProductByID(id int) model.DBProduct {
 
 func GetItemById(itemID string) model.DBItem {
 	var item model.DBItem
+	itemID = ""
 	for i := range items {
 		if itemID == items[i].ItemID {
 			item = items[i]
 		}
 	}
 	return item
+}
+
+//returns businessmodel of product with specific ean. If not available returns nil
+func GetProductByEan(ean string) model.DBProduct {
+	var p model.DBProduct
+	p.ProductID = 0
+	for i := range products {
+		if ean == products[i].EAN {
+			p = products[i]
+		}
+	}
+	return p
 }
 
 /*
@@ -67,12 +74,6 @@ func SetItemSelledDate(itemID string) model.DBItem {
 
 /*
 **
-Helper Functions
-**
-*/
-
-/*
-**
 Receive Data from other Modul
 **
 */
@@ -88,14 +89,16 @@ func ReceiveEditProduct(editedProduct model.DBProduct) {
 	}
 }
 
-func ReceiveRemoveProduct(ean string) {
+func ReceiveRemoveProduct(id int) {
 	var p model.DBProduct //emtpy product to overwrite the last element
 	for i := range products {
-		if ean == products[i].EAN {
-			// Remove the element at index i from product.
-			copy(products[i:], products[i+1:])    // Shift a[i+1:] left one index.
-			products[len(products)-1] = p         // Erase last element (write zero value).
-			products = products[:len(products)-1] // Truncate slice.
+		if id == products[i].ProductID {
+
+			copy(products[i:], products[i+1:])    // shift valuesafter the indexwith a factor of 1
+			products[len(products)-1] = p         // remove element
+			products = products[:len(products)-1] // truncateslice
+
+			return
 		}
 
 	}

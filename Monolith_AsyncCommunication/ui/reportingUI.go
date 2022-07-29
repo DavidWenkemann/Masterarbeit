@@ -14,18 +14,22 @@ const (
 	columnKeyReporting2 = "Name"
 	columnKeyReporting3 = "Preis"
 	columnKeyReporting4 = "Anzahl"
+	columnKeyReporting5 = "ID"
 )
 
 //Generates Rows for Cart Table
 func generateRowsFromStock() []table.Row {
 	rows := []table.Row{}
 
-	for i := 0; i <= len(reporting.GetAllProducts())-1; i++ {
+	s := reporting.GetAllProducts()
+
+	for _, v := range s {
 		row := table.NewRow(table.RowData{
-			columnKeyReporting1: reporting.GetAllProducts()[i].EAN,
-			columnKeyReporting2: reporting.GetAllProducts()[i].Name,
-			columnKeyReporting3: fmt.Sprintf("%.2f€", reporting.GetAllProducts()[i].Price),
-			columnKeyReporting4: reporting.GetItemsInStockByEan(reporting.GetAllProducts()[i].EAN),
+			columnKeyReporting1: v.EAN,
+			columnKeyReporting2: v.Name,
+			columnKeyReporting3: fmt.Sprintf("%.2f€", v.Price),
+			columnKeyReporting4: reporting.GetItemsInStockByEan(v.EAN),
+			columnKeyReporting5: v.ProductID,
 		})
 		rows = append(rows, row)
 	}

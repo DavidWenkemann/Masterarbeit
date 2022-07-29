@@ -3,6 +3,10 @@ package main
 import (
 	"fmt"
 
+	reportingcommunication "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/communication"
+	storecommunication "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/communication"
+	warehousecommunication "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/warehouse/communication"
+
 	userinterface "github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/ui"
 )
 
@@ -13,6 +17,10 @@ func main() {
 
 	//Loads Data
 	SpinupDB()
+
+	reportingcommunication.ReportingListener()
+	storecommunication.StoreListener()
+	warehousecommunication.WarehouseListener()
 
 	//Starts UI
 	userinterface.StartUI()

@@ -5,6 +5,7 @@
 package database
 
 import (
+	"errors"
 	"time"
 
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/reporting/model"
@@ -32,7 +33,7 @@ Public Functions
 */
 
 //returns businessmodel of product with specific ean. If not available returns nil
-func GetProductByEan(ean string) model.DBProduct {
+func GetProductByEan(ean string) (model.DBProduct, error) {
 	var p model.DBProduct
 	p.ProductID = 0
 	for i := range products {
@@ -40,7 +41,11 @@ func GetProductByEan(ean string) model.DBProduct {
 			p = products[i]
 		}
 	}
-	return p
+	if p.ProductID == 0 {
+		return p, errors.New("EAN Not Found")
+	}
+
+	return p, nil
 }
 
 //Maps all products to businessproducts and returns them
@@ -75,17 +80,36 @@ func ReceiveEditProduct(editedProduct model.DBProduct) {
 	}
 }
 
-func ReceiveRemoveProduct(ean string) {
+func ReceiveRemoveProduct2(id int) {
 	var p model.DBProduct //emtpy product to overwrite the last element
 	for i := range products {
-		if ean == products[i].EAN {
-			// Remove the element at index i from product.
-			copy(products[i:], products[i+1:])    // Shift a[i+1:] left one index.
-			products[len(products)-1] = p         // Erase last element (write zero value).
-			products = products[:len(products)-1] // Truncate slice.
+		if id == products[i].ProductID {
+
+			copy(products[i:], products[i+1:])    // shift valuesafter the indexwith a factor of 1
+			products[len(products)-1] = p         // remove element
+			products = products[:len(products)-1] // truncateslice
+
+			return
 		}
 
 	}
+
+}
+
+func ReceiveRemoveProduct(id int) {
+
+	s := -1
+	for i := range products {
+		if id == products[i].ProductID {
+			s = i
+			break
+		}
+	}
+	if s >= 0 {
+		products = append(products[:s], products[s+1:]...)
+
+	}
+	return
 }
 
 func ReceiveEditItem(item model.DBItem) {
