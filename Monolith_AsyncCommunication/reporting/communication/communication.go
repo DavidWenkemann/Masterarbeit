@@ -100,7 +100,12 @@ func saveReceivedProduct(receivedProduct model.BProduct) {
 
 //Only new Items possible
 func saveReceivedItem(receivedItem model.BItem) {
-	database.ReceiveNewItem(mapBItemToDBItem(receivedItem))
+	if receivedItem.SellingDate.IsZero() {
+		database.ReceiveNewItem(mapBItemToDBItem(receivedItem))
+
+	} else {
+		database.ReceiveEditItem(mapBItemToDBItem(receivedItem))
+	}
 }
 
 /*

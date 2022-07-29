@@ -17,7 +17,11 @@ var cart = []storemodel.BItem{}
 
 //adds product to the cart
 func AddToCart(itemID string) {
-	cart = append(cart, GetItemById(itemID))
+	item := GetItemById(itemID)
+
+	if item.ProductID > 0 {
+		cart = append(cart, item)
+	}
 }
 
 //Sets SellingDate for everything in on time now and clears cart
@@ -66,7 +70,7 @@ func GetItemById(itemID string) storemodel.BItem {
 func SetItemSelledDate(itemID string) {
 	sendItem := GetItemById(itemID)
 	sendItem.SellingDate = time.Now()
-	communication.SendEditItem(sendItem) //reportingdb.ReceiveEditProduct(mapBasedataDBProductToReportingDBProduct(editedProduct))
+	communication.SendEditItem(sendItem)
 }
 
 /*
@@ -75,7 +79,11 @@ Mapping DB Model -> B Model
 **
 */
 func mapStoreDBProductToStoreBProduct(input storemodel.DBProduct) storemodel.BProduct {
-	return storemodel.BProduct{ProductID: input.ProductID, EAN: input.EAN, Name: input.Name, Price: input.Price}
+	return storemodel.BProduct{
+		ProductID: input.ProductID,
+		EAN:       input.EAN,
+		Name:      input.Name,
+		Price:     input.Price}
 }
 
 func mapStoreDBProductSliceToStoreBProductSlice(input []storemodel.DBProduct) []storemodel.BProduct {
@@ -88,7 +96,9 @@ func mapStoreDBProductSliceToStoreBProductSlice(input []storemodel.DBProduct) []
 }
 
 func mapStoreDBItemToStoreBItem(input storemodel.DBItem) storemodel.BItem {
-	return storemodel.BItem{ProductID: input.ProductID, ItemID: input.ItemID}
+	return storemodel.BItem{
+		ProductID: input.ProductID,
+		ItemID:    input.ItemID}
 }
 
 /*

@@ -6,6 +6,7 @@ import (
 
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store"
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/model"
+
 	"github.com/charmbracelet/lipgloss"
 	"github.com/evertras/bubble-table/table"
 )
@@ -28,6 +29,7 @@ func generateRowsFromCart(refreshedcart []model.APIItem, m modelUI) []table.Row 
 		}
 		refreshedcart = products
 	*/
+
 	for i := 0; i <= len(refreshedcart)-1; i++ {
 		row := table.NewRow(table.RowData{
 			columnKeyName:  refreshedcart[i].Product.Name,
@@ -35,6 +37,18 @@ func generateRowsFromCart(refreshedcart []model.APIItem, m modelUI) []table.Row 
 		})
 		rows = append(rows, row)
 	}
+
+	/*
+		items := database.GetAllProducts()
+
+		for i := 0; i <= len(items)-1; i++ {
+			row := table.NewRow(table.RowData{
+				columnKeyName:  items[i].Name,
+				columnKeyPrice: items[i].ProductID,
+			})
+			rows = append(rows, row)
+		}
+	*/
 
 	lastrow := table.NewRow(table.RowData{
 		//columnKeyName:  fmt.Sprintf(" %s", m.scanInputStore.View()),

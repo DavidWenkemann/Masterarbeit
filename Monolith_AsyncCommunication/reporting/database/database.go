@@ -32,6 +32,17 @@ Public Functions
 **
 */
 
+func GetItemById(itemID string) model.DBItem {
+	var item model.DBItem
+	//itemID = ""
+	for i := range items {
+		if itemID == items[i].ItemID {
+			item = items[i]
+		}
+	}
+	return item
+}
+
 //returns businessmodel of product with specific ean. If not available returns nil
 func GetProductByEan(ean string) (model.DBProduct, error) {
 	var p model.DBProduct
@@ -121,6 +132,7 @@ func ReceiveEditItem(item model.DBItem) {
 }
 
 func ReceiveNewItem(newItem model.DBItem) {
+
 	items = append(items, newItem)
 }
 

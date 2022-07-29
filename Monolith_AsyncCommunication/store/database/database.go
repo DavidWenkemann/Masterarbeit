@@ -5,6 +5,8 @@
 package database
 
 import (
+	"errors"
+
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_AsyncCommunication/store/model"
 )
 
@@ -36,7 +38,7 @@ func GetProductByID(id int) model.DBProduct {
 
 func GetItemById(itemID string) model.DBItem {
 	var item model.DBItem
-	itemID = ""
+	//itemID = ""
 	for i := range items {
 		if itemID == items[i].ItemID {
 			item = items[i]
@@ -46,7 +48,7 @@ func GetItemById(itemID string) model.DBItem {
 }
 
 //returns businessmodel of product with specific ean. If not available returns nil
-func GetProductByEan(ean string) model.DBProduct {
+func GetProductByEan(ean string) (model.DBProduct, error) {
 	var p model.DBProduct
 	p.ProductID = 0
 	for i := range products {
@@ -54,7 +56,19 @@ func GetProductByEan(ean string) model.DBProduct {
 			p = products[i]
 		}
 	}
-	return p
+	if p.ProductID == 0 {
+		return p, errors.New("EAN Not Found")
+	}
+
+	return p, nil
+}
+
+func GetAllProducts() []model.DBProduct {
+	return products
+}
+
+func GetAllItems() []model.DBItem {
+	return items
 }
 
 /*

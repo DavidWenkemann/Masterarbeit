@@ -65,20 +65,35 @@ func StoreListener() {
 
 func saveReceivedProduct(receivedProduct model.BProduct) {
 	//if new Product
-	if database.GetProductByEan(receivedProduct.EAN).ProductID == 0 {
-		database.ReceiveNewProduct(mapBProductToDBProduct(receivedProduct))
-	}
 
-	//if NOT New Product
-	if database.GetProductByEan(receivedProduct.EAN).ProductID != 0 {
-		//If Not deleted
-		if database.GetProductByEan(receivedProduct.EAN).EAN != "" {
-			database.ReceiveEditProduct(mapBProductToDBProduct(receivedProduct))
-		} else { //deleted
-			database.ReceiveRemoveProduct(receivedProduct.ProductID)
+	//Get Product EAN by ID
+	prods := database.GetAllProducts()
+	ean := ""
+	for i := range prods {
+		if prods[i].ProductID == receivedProduct.ProductID {
+			ean = prods[i].EAN
 		}
 
 	}
+
+	_, err := database.GetProductByEan(ean)
+
+	if err != nil {
+		database.ReceiveNewProduct(mapBProductToDBProduct(receivedProduct))
+		return
+	}
+
+	//if NOT New Product
+	//If Not deleted
+	if receivedProduct.EAN == "" {
+		//panic("Hilfe!")
+
+		database.ReceiveRemoveProduct(receivedProduct.ProductID)
+	} else {
+		database.ReceiveEditProduct(mapBProductToDBProduct(receivedProduct))
+
+	}
+
 }
 
 //Only new Items possible
