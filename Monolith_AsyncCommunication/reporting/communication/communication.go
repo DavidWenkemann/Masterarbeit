@@ -67,7 +67,18 @@ func ReportingListener() {
 
 func saveReceivedProduct(receivedProduct model.BProduct) {
 	//if new Product
-	_, err := database.GetProductByEan(receivedProduct.EAN)
+
+	//Get Product EAN by ID
+	prods := database.GetAllProducts()
+	ean := ""
+	for i := range prods {
+		if prods[i].ProductID == receivedProduct.ProductID {
+			ean = prods[i].EAN
+		}
+
+	}
+
+	_, err := database.GetProductByEan(ean)
 
 	if err != nil {
 		database.ReceiveNewProduct(mapBProductToDBProduct(receivedProduct))
@@ -99,9 +110,19 @@ Mapping B Model -> DB Model
 */
 
 func mapBItemToDBItem(input model.BItem) model.DBItem {
-	return model.DBItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+	return model.DBItem{
+		ProductID:     input.ProductID,
+		ItemID:        input.ItemID,
+		ReceivingDate: input.ReceivingDate,
+		SellingDate:   input.SellingDate,
+	}
 }
 
 func mapBProductToDBProduct(input model.BProduct) model.DBProduct {
-	return model.DBProduct{ProductID: input.ProductID, EAN: input.EAN, Name: input.Name, Price: input.Price}
+	return model.DBProduct{
+		ProductID: input.ProductID,
+		EAN:       input.EAN,
+		Name:      input.Name,
+		Price:     input.Price,
+	}
 }
