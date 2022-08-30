@@ -43,7 +43,7 @@ func oldItem(pID int, timeReceived time.Time, timeSelled *time.Time) model.DBIte
 	i.ProductID = pID
 	i.ReceivingDate = timeReceived
 	if timeSelled != nil {
-		i.SellingDate = *timeSelled
+		//i.SellingDate = *timeSelled
 	}
 	//Print item serial for bottle
 	return i

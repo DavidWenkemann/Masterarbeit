@@ -59,11 +59,11 @@ func mapWarehouseDBProductToWarehouseBProduct(input warehousemodel.DBProduct) wa
 }
 
 func mapWarehouseDBItemToWarehouseBItem(input warehousemodel.DBItem) warehousemodel.BItem {
-	return warehousemodel.BItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+	return warehousemodel.BItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate}
 }
 
 func mapWarehouseDBItemToReportingDBItem(input warehousemodel.DBItem) reportingmodel.DBItem {
-	return reportingmodel.DBItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate, SellingDate: input.SellingDate}
+	return reportingmodel.DBItem{ProductID: input.ProductID, ItemID: input.ItemID, ReceivingDate: input.ReceivingDate}
 }
 
 func mapWarehouseDBItemToStoreDBItem(input warehousemodel.DBItem) storemodel.DBItem {
