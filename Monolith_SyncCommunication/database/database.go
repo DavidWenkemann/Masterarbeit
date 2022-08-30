@@ -1,4 +1,6 @@
-//Package Database emulates a Database.
+// DATABASE
+//
+//Package Database only emulates a Database.
 //In fact all the functions are implemented, but the data is simply stored
 //in RAM and will be resetted when the application is closed.
 
@@ -84,8 +86,6 @@ func SpinupDB() {
 	NewProduct("4066600641919", "Paulaner Hefeweizen", 1.39)
 	NewProduct("4029764001807", "Clubmate", 2.50)
 	NewProduct("4102560080068", "Alasia Medium Water", 1)
-
-	//emtpyTime := time.Now().IsZero()
 
 	//fill up item database with several items in the past.
 	items = append(items, oldItem(1, time.Now().Add(-24*time.Hour), nil))
@@ -179,24 +179,10 @@ func GetItemById(itemID string) model.DBItem {
 
 //Maps all products to businessproducts and returns them
 func GetAllProducts() []model.DBProduct {
-
-	//var products []model.DBProduct
-
-	//for i := range products {
-	//	products = append(products, mapDBProductToBProduct(products[i]))
-	//}
-
 	return products
 }
 
 func GetAllItems() []model.DBItem {
-
-	//var products []model.DBProduct
-
-	//for i := range products {
-	//	products = append(products, mapDBProductToBProduct(products[i]))
-	//}
-
 	return items
 }
 

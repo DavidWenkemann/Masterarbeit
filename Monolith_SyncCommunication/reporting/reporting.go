@@ -1,7 +1,7 @@
-//package reporting contains the module reporting
-//this module is responsible to create an overview of all products
-//stored in the warehouse at the moment
-//It has its own UI
+// MODULE REPORTING
+//
+// In the Reporting an Overview of all stored items is created.
+
 package reporting
 
 import (
@@ -9,6 +9,7 @@ import (
 	"github.com/DavidWenkemann/Masterarbeit/Monolith_SyncCommunication/model"
 )
 
+//returns all items that are in stock at the moment
 func GetItemsInStockByEan(ean string) int {
 	var count int
 	items := GetAllItems()

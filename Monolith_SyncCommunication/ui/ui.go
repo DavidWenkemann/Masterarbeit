@@ -1,3 +1,10 @@
+// PACKAGE USERINTERFACE
+//
+// The userinterface is devided in four tabs.
+// For each module one tab.
+// The basic handling happens in this file,
+// the creation of the printed strings in the file for the module
+
 package userinterface
 
 import (

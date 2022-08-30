@@ -1,3 +1,8 @@
+// MODULE STORE
+//
+// In the Store its possible to add items to the cart.
+// After that the whole cart can be deleted or checked out.
+
 package store
 
 import (
@@ -26,6 +31,7 @@ func ClearCart() {
 	cart = clear
 }
 
+//calculates the price for all items in the cart
 func GetPriceOfCart() float64 {
 	var price float64
 	for i := range cart {
@@ -36,10 +42,6 @@ func GetPriceOfCart() float64 {
 
 //Converts Cart to API cart and returns it
 func GetCart() []model.BItem {
-	//var cartAPI []model.APIItem
-	//for i := range cart {
-	//	cartAPI = append(cartAPI, mapBItemToAPIItem(cart[i]))
-	//}
 	return cart
 }
 

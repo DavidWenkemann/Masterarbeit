@@ -1,4 +1,4 @@
-//models for all three layers for product
+//contains product models for all three layers
 
 package model
 

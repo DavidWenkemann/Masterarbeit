@@ -1,3 +1,5 @@
+//handels UI for warehouse module
+
 package userinterface
 
 import (
