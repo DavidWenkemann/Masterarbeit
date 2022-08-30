@@ -14,7 +14,12 @@ var cart = []model.BItem{}
 
 //adds product to the cart
 func AddToCart(itemID string) {
-	cart = append(cart, GetItemById(itemID))
+	if GetProductByID(GetItemById(itemID).ProductID).Name != "" {
+		if GetItemById(itemID).SellingDate.IsZero() {
+			cart = append(cart, GetItemById(itemID))
+		}
+	}
+
 }
 
 //Sets SellingDate for everything in on time now and clears cart

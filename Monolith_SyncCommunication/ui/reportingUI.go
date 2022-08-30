@@ -18,6 +18,16 @@ const (
 	columnKeyReporting4 = "Anzahl"
 )
 
+const (
+	columnKeyReportingSelled1 = "Verkauft am"
+	columnKeyReportingSelled2 = "ID"
+	columnKeyReportingSelled3 = "Name"
+	columnKeyReportingSelled4 = "Preis"
+
+	layoutISO = "2006-01-02"
+	Stamp     = "Jan _2 15:04:05"
+)
+
 //Generates Rows for Cart Table
 func generateRowsFromStock() []table.Row {
 	rows := []table.Row{}
@@ -31,6 +41,33 @@ func generateRowsFromStock() []table.Row {
 		})
 		rows = append(rows, row)
 	}
+	return rows
+}
+
+//Generates Rows for Cart Table
+func generateRowsFromSelledItems() []table.Row {
+	rows := []table.Row{}
+	selledItems := reporting.GetSelledItems()
+	gesamtverdienst := 0.0
+
+	for i := 0; i <= len(selledItems)-1; i++ {
+		row := table.NewRow(table.RowData{
+			columnKeyReportingSelled1: selledItems[i].SellingDate.Format(Stamp),
+			columnKeyReportingSelled2: selledItems[i].ItemID,
+			columnKeyReportingSelled3: reporting.GetProductByID(selledItems[i].ProductID).Name,
+			columnKeyReportingSelled4: fmt.Sprintf("%.2f€", reporting.GetProductByID(selledItems[i].ProductID).Price),
+		})
+		gesamtverdienst += reporting.GetProductByID(selledItems[i].ProductID).Price
+		rows = append(rows, row)
+	}
+
+	row := table.NewRow(table.RowData{
+		columnKeyReportingSelled3: "Gesamtverdienst:",
+		columnKeyReportingSelled4: fmt.Sprintf("%.2f€", gesamtverdienst),
+	})
+
+	rows = append(rows, row)
+
 	return rows
 }
 
@@ -55,17 +92,32 @@ func ReportingUI(m modelUI) string {
 
 	//ReportingTable
 
-	desc := lipgloss.JoinVertical(lipgloss.Left,
-		descStyle.Render("Reporting View"+divider+"All Items in Stock"),
-	)
-	row := lipgloss.Place(width, 3,
-		lipgloss.Center, lipgloss.Center,
-		lipgloss.JoinHorizontal(lipgloss.Top, desc),
-	)
+	if m.selectedTable {
+		desc := lipgloss.JoinVertical(lipgloss.Left,
+			descStyle.Render("Reporting View"+divider+"change with arrows"+divider+"All Items in Stock"),
+		)
+		row := lipgloss.Place(width, 3,
+			lipgloss.Center, lipgloss.Center,
+			lipgloss.JoinHorizontal(lipgloss.Top, desc),
+		)
 
-	doc.WriteString(row + "\n")
+		doc.WriteString(row + "\n")
 
-	m.reportingTable = m.reportingTable.WithRows(generateRowsFromStock())
+		m.reportingTable = m.reportingTable.WithRows(generateRowsFromStock())
+	} else {
+		desc := lipgloss.JoinVertical(lipgloss.Left,
+			descStyle.Render("Reporting View"+divider+"change with arrows"+divider+"All Selled Items"),
+		)
+		row := lipgloss.Place(width, 3,
+			lipgloss.Center, lipgloss.Center,
+			lipgloss.JoinHorizontal(lipgloss.Top, desc),
+		)
+
+		doc.WriteString(row + "\n")
+
+		m.reportingTable = m.reportingTableSelled.WithRows(generateRowsFromSelledItems())
+	}
+
 	doc.WriteString(m.reportingTable.View())
 
 	return docStyle.Render(doc.String())

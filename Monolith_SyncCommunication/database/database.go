@@ -88,19 +88,22 @@ func SpinupDB() {
 	NewProduct("4102560080068", "Alasia Medium Water", 1)
 
 	//fill up item database with several items in the past.
-	items = append(items, oldItem(1, time.Now().Add(-24*time.Hour), nil))
-	items = append(items, oldItem(1, time.Now().Add(-54*time.Hour), nil))
-	items = append(items, oldItem(1, time.Now().Add(-54*time.Hour), nil))
-	items = append(items, oldItem(1, time.Now().Add(-54*time.Hour), nil))
 
-	items = append(items, oldItem(2, time.Now().Add(-54*time.Hour), nil))
-	items = append(items, oldItem(2, time.Now().Add(-54*time.Hour), nil))
-	items = append(items, oldItem(2, time.Now().Add(-54*time.Hour), nil))
-	items = append(items, oldItem(2, time.Now().Add(-46*time.Hour), timePtr(time.Now().Add(-24*time.Hour))))
+	/*
+		items = append(items, oldItem(1, time.Now().Add(-24*time.Hour), nil))
+		items = append(items, oldItem(1, time.Now().Add(-54*time.Hour), nil))
+		items = append(items, oldItem(1, time.Now().Add(-54*time.Hour), nil))
+		items = append(items, oldItem(1, time.Now().Add(-54*time.Hour), nil))
 
-	items = append(items, oldItem(3, time.Now().Add(-54*time.Hour), nil))
-	items = append(items, oldItem(3, time.Now().Add(-54*time.Hour), nil))
-	items = append(items, oldItem(3, time.Now().Add(-827*time.Hour), nil))
+		items = append(items, oldItem(2, time.Now().Add(-54*time.Hour), nil))
+		items = append(items, oldItem(2, time.Now().Add(-54*time.Hour), nil))
+		items = append(items, oldItem(2, time.Now().Add(-54*time.Hour), nil))
+		items = append(items, oldItem(2, time.Now().Add(-46*time.Hour), timePtr(time.Now().Add(-24*time.Hour))))
+
+		items = append(items, oldItem(3, time.Now().Add(-54*time.Hour), nil))
+		items = append(items, oldItem(3, time.Now().Add(-54*time.Hour), nil))
+		items = append(items, oldItem(3, time.Now().Add(-827*time.Hour), nil))
+	*/
 
 	//fmt.Printf("%v", products)
 	//fmt.Printf("%v", items)
