@@ -10,13 +10,13 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Tue Aug 30 10:18:10 2022
+# Make data base, printed on Tue Aug 30 11:11:40 2022
 
 # Variables
 
 # automatic
-<D = $(patsubst %/,%,$(dir $<))
  
+<D = $(patsubst %/,%,$(dir $<))
 # automatic
 ?F = $(notdir $?)
 # environment
@@ -46,7 +46,7 @@ __CFBundleIdentifier = com.microsoft.VSCode
 # environment
 INFOPATH = /opt/homebrew/share/info:
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/fb/64n7xp1549l935l4jm_hngtw0000gn/T/vscode-ipc-94362f67-54b0-48b3-89fd-1d099dc3801c.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/fb/64n7xp1549l935l4jm_hngtw0000gn/T/vscode-ipc-88c3436e-b110-4319-b297-e96009d372c3.sock
 # environment
 VSCODE_CWD = /
 # environment
@@ -134,6 +134,7 @@ HOMEBREW_PREFIX = /opt/homebrew
 # environment
 HOMEBREW_REPOSITORY = /opt/homebrew
 # environment
+ 
 __CF_USER_TEXT_ENCODING = 0x1F5:0x0:0x3
 # environment
 COMMAND_MODE = unix2003
@@ -154,7 +155,6 @@ LANG = C
 # environment
 VSCODE_PID = 5490
 # variable set hash-table stats:
- 
 # Load=69/1024=7%, Rehash=0, Collisions=2/92=2%
 
 # Pattern-specific Variable Values
@@ -227,6 +227,6 @@ compile:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Tue Aug 30 10:18:10 2022
+# Finished Make data base on Tue Aug 30 11:11:40 2022
 
  
