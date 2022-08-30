@@ -10,13 +10,12 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Tue Aug 30 11:10:04 2022
+# Make data base, printed on Tue Aug 30 11:25:00 2022
 
 # Variables
 
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
- 
 # automatic
 ?F = $(notdir $?)
 # environment
@@ -46,7 +45,7 @@ __CFBundleIdentifier = com.microsoft.VSCode
 # environment
 INFOPATH = /opt/homebrew/share/info:
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/fb/64n7xp1549l935l4jm_hngtw0000gn/T/vscode-ipc-c1bc38de-b530-4477-9fa5-bab8eada5d19.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/fb/64n7xp1549l935l4jm_hngtw0000gn/T/vscode-ipc-7455d609-1309-47e3-be30-581048621651.sock
 # environment
 VSCODE_CWD = /
 # environment
@@ -160,12 +159,11 @@ VSCODE_PID = 5490
 
 # No pattern-specific variable values.
 
- 
 # Directories
 
-# . (device 16777233, inode 16543713): 15 files, no impossibilities.
+# . (device 16777233, inode 16543713): 16 files, no impossibilities.
 
-# 15 files, no impossibilities in 1 directories.
+# 16 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -227,6 +225,6 @@ compile:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Tue Aug 30 11:10:04 2022
+# Finished Make data base on Tue Aug 30 11:25:00 2022
 
  

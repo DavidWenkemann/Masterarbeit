@@ -1,3 +1,7 @@
+// COMMUNICATION
+//
+//store communication sends and receivs informations
+
 package communication
 
 import (

@@ -1,3 +1,5 @@
+//handels UI for reporting module
+
 package userinterface
 
 import (

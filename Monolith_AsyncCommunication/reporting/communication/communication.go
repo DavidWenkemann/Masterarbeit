@@ -1,4 +1,6 @@
-//store communication sends no informations, its only receiving
+// COMMUNICATION
+//
+//reporting communication sends no informations, its only receiving
 
 package communication
 

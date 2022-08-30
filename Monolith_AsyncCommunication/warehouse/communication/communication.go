@@ -1,5 +1,6 @@
-//communication of basedata is only sending informations
-//there is no receiving informations
+// COMMUNICATION
+//
+//warehouse communication sends and receivs informations
 
 package communication
 

@@ -1,3 +1,8 @@
+// MODULE STORE
+//
+// In the Store its possible to add items to the cart.
+// After that the whole cart can be deleted or checked out.
+
 package store
 
 import (

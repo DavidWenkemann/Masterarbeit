@@ -1,6 +1,8 @@
+// MODULE WAREHOUSE
+//
 // In the Warehouse new items were delivered.
-// When the EAN is scanned the item will be added to database
-// and the the item id will be returned
+// It is possible to scan EAN of the items. The items
+// will be added to the database.
 
 package warehouse
 

@@ -1,4 +1,6 @@
-//Package Database emulates a Database.
+// DATABASE
+//
+//Package Database only emulates a Database.
 //In fact all the functions are implemented, but the data is simply stored
 //in RAM and will be resetted when the application is closed.
 

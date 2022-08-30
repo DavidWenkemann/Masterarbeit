@@ -1,5 +1,7 @@
-//basedata package is responsible for adding and removing basedata.
-//It is connected to DB and UI Layer
+// MODULE BASEDATA
+//
+// Basedata handels all products. Products can be created,
+// edited or deleted.
 
 package basedata
 

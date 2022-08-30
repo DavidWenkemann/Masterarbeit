@@ -1,4 +1,4 @@
-//models for all three layers for product
+//contains item models for all three layers
 package model
 
 import "time"

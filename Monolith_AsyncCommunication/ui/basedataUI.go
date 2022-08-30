@@ -1,3 +1,5 @@
+//handels UI for basedata module
+
 package userinterface
 
 import (
