@@ -16,8 +16,6 @@ func GetItemsInStockByEan(ean string) int {
 	items := GetAllItems()
 	pID := GetProductByEan(ean).ProductID
 
-	//TODO: funktioniert wohl ncch nicht mit time
-
 	for i := range items {
 		if pID == items[i].ProductID && items[i].SellingDate.IsZero() {
 			count++
@@ -25,6 +23,19 @@ func GetItemsInStockByEan(ean string) int {
 	}
 
 	return count
+}
+
+func GetSelledItems() []model.BItem {
+	items := GetAllItems()
+	var selledItems []model.BItem
+
+	for i := range items {
+		if !items[i].SellingDate.IsZero() {
+			selledItems = append(selledItems, items[i])
+		}
+	}
+
+	return selledItems
 }
 
 /*
@@ -47,6 +58,10 @@ func GetProductByEan(ean string) model.DBProduct {
 	}
 	return product
 
+}
+
+func GetProductByID(id int) model.DBProduct {
+	return database.GetProductByID(id)
 }
 
 /*

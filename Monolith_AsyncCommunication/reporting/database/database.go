@@ -61,6 +61,18 @@ func GetProductByEan(ean string) (model.DBProduct, error) {
 	return p, nil
 }
 
+func GetProductByID(id int) model.DBProduct {
+	var p model.DBProduct
+	p.ProductID = 0
+	for i := range products {
+		if id == products[i].ProductID {
+			p = products[i]
+		}
+	}
+
+	return p
+}
+
 //Maps all products to businessproducts and returns them
 func GetAllProducts() []model.DBProduct {
 	return products

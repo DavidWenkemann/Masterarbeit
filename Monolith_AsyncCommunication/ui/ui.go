@@ -44,7 +44,9 @@ type modelUI struct {
 	lastStocked warehousemodel.APIProduct
 
 	//Reporting
-	reportingTable table.Model //for bubble table
+	reportingTable       table.Model //for bubble table
+	reportingTableSelled table.Model //for bubble table
+	selectedTable        bool
 
 	//Basedata
 	basedataTable          table.Model //for bubble table
@@ -92,9 +94,17 @@ func initialModel() modelUI {
 			table.NewColumn(columnKeyReporting1, "EAN", 15),
 			table.NewColumn(columnKeyReporting2, "Name", 25),
 			table.NewColumn(columnKeyReporting3, "Price", 6),
-			table.NewColumn(columnKeyReporting4, "Quantity", 5),
-			table.NewColumn(columnKeyReporting5, "ID", 5),
+			table.NewColumn(columnKeyReporting4, "Quantity", 9),
 		}),
+
+		reportingTableSelled: table.New([]table.Column{
+			table.NewColumn(columnKeyReportingSelled1, "Selled On", 15),
+			table.NewColumn(columnKeyReportingSelled2, "ID", 5),
+			table.NewColumn(columnKeyReportingSelled3, "Name", 25),
+			table.NewColumn(columnKeyReportingSelled4, "Price", 7),
+		}),
+
+		selectedTable: true,
 
 		//Basedata
 		basedataTable: table.New([]table.Column{
@@ -186,6 +196,16 @@ func (m modelUI) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				if statusWarehouse == "alert" || statusWarehouse == "failure" {
 					statusWarehouse = "scan"
 				}
+			}
+		}
+
+	case 2: //Reporting
+		switch msg := msg.(type) {
+
+		case tea.KeyMsg:
+			switch msg.String() {
+			case "right", "left":
+				m.selectedTable = !m.selectedTable
 			}
 		}
 
